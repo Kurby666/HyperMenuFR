@@ -49,6 +49,14 @@ public class RolesTab : ITab
 
             DrawDetective();
 
+            GUILayout.Space(15);
+
+            DrawPhantom();
+
+            GUILayout.Space(15);
+
+            DrawJudge();
+
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
@@ -69,6 +77,17 @@ public class RolesTab : ITab
 
         CheatToggles.killReach = GUILayout.Toggle(CheatToggles.killReach, " Kill Reach");
 
+        CheatToggles.killAura = GUILayout.Toggle(CheatToggles.killAura, " Kill Aura (auto-kill nearby)");
+        if (CheatToggles.killAura)
+        {
+            GUILayout.Label($"  Aura Radius: {CheatToggles.killAuraDist:F1}");
+            CheatToggles.killAuraDist = GUILayout.HorizontalSlider(CheatToggles.killAuraDist, 0.5f, 10f);
+        }
+
+        CheatToggles.autoVentKill = GUILayout.Toggle(CheatToggles.autoVentKill, " Auto-Vent After Kill");
+
+        CheatToggles.bodyToVent = GUILayout.Toggle(CheatToggles.bodyToVent, " Body To Vent (host, hides bodies)");
+
         Roles.SkipSabotageChecks.SabotageInVents = GUILayout.Toggle(Roles.SkipSabotageChecks.SabotageInVents, " Allow Sabotaging In Vents As Imposter");
 
         CheatToggles.impostorTasks = GUILayout.Toggle(CheatToggles.impostorTasks, " Allow Tasks");
@@ -81,6 +100,8 @@ public class RolesTab : ITab
         CheatToggles.noShapeshiftAnim = GUILayout.Toggle(CheatToggles.noShapeshiftAnim, " No Ss Animation");
 
         CheatToggles.endlessSsDuration = GUILayout.Toggle(CheatToggles.endlessSsDuration, " Endless Ss Duration");
+
+        CheatToggles.morphDead = GUILayout.Toggle(CheatToggles.morphDead, " Morph Into Dead");
     }
 
     private void DrawCrewmate()
@@ -90,6 +111,8 @@ public class RolesTab : ITab
         Roles.SkipSabotageChecks.SabotageAsCrewmate = GUILayout.Toggle(Roles.SkipSabotageChecks.SabotageAsCrewmate, " Sabotage As Crewmate");
 
         CheatToggles.showTasksMenu = GUILayout.Toggle(CheatToggles.showTasksMenu, " Show Tasks Menu");
+
+        CheatToggles.commsBypass = GUILayout.Toggle(CheatToggles.commsBypass, " Bypass Comms Sabotage");
     }
 
     private void DrawTracker()
@@ -128,5 +151,24 @@ public class RolesTab : ITab
         GUILayout.Label("Detective", GUIStylePreset.TabSubtitle);
 
         CheatToggles.interrogateReach = GUILayout.Toggle(CheatToggles.interrogateReach, " Interrogate Reach");
+
+        CheatToggles.detNoCd = GUILayout.Toggle(CheatToggles.detNoCd, " No Interrogate Cooldown");
+    }
+
+    private void DrawPhantom()
+    {
+        GUILayout.Label("Phantom", GUIStylePreset.TabSubtitle);
+
+        CheatToggles.endlessInvis = GUILayout.Toggle(CheatToggles.endlessInvis, " Endless Invisibility");
+
+        CheatToggles.smokeSpam = GUILayout.Toggle(CheatToggles.smokeSpam, " Smoke Bomb (vanish spam)");
+        GUILayout.Label("  Phantom only, in match. Smoke cloud for everyone.");
+    }
+
+    private void DrawJudge()
+    {
+        GUILayout.Label("Judge", GUIStylePreset.TabSubtitle);
+
+        CheatToggles.judgeNoTasks = GUILayout.Toggle(CheatToggles.judgeNoTasks, " Overrule Without Tasks");
     }
 }

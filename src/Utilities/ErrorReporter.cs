@@ -420,7 +420,7 @@ public static class ErrorReporter
                 viaChainloader.Sort();
                 return string.Join("\n", viaChainloader);
             }
-            var viaScan = TryGetPluginListFromTypeScan();
+            var viaScan = GetInstalledPluginDlls();
             if (viaScan != null && viaScan.Count > 0)
             {
                 viaScan.Sort();
@@ -467,48 +467,74 @@ public static class ErrorReporter
         return lines;
     }
 
-    private static System.Collections.Generic.List<string> TryGetPluginListFromTypeScan()
+    /// <summary>
+    /// Lists the plugin DLLs sitting in the BepInEx plugins folder, which is the thing an
+    /// error report actually wants to show: which mod files are installed on this machine.
+    ///
+    /// It deliberately does NOT enumerate the types inside those assemblies. Under BepInEx
+    /// IL2CPP that path reaches RuntimeModule type enumeration, which aborts the CLR outright
+    /// with "Fatal error. Internal CLR error. (0x80131506)". That is a runtime abort rather than
+    /// a managed exception, so neither a try/catch nor the Safe() wrapper can contain it, and a
+    /// single stray exception anywhere in the UI would take the whole game down. Reading the
+    /// directory and reading an assembly's name are both safe. Never throws.
+    /// </summary>
+    private static System.Collections.Generic.List<string> GetInstalledPluginDlls()
     {
         var lines = new System.Collections.Generic.List<string>();
-        var seen = new System.Collections.Generic.HashSet<string>();
+
+        // Names of the assemblies BepInEx actually loaded, so each file can be marked.
+        var loaded = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
         try
         {
             foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
             {
-                System.Type[] types;
-                try { types = asm.GetTypes(); }
-                catch (System.Reflection.ReflectionTypeLoadException rtle)
+                try
                 {
-                    try { types = rtle.Types; } catch { continue; }
-                }
-                catch { continue; }
-                if (types == null) continue;
-                foreach (var t in types)
-                {
-                    try
+                    string n = asm.GetName().Name;
+                    if (!string.IsNullOrEmpty(n))
                     {
-                        if (t == null) continue;
-                        foreach (var attr in t.GetCustomAttributes(false))
-                        {
-                            if (attr == null || !attr.GetType().Name.StartsWith("BepInPlugin")) continue;
-                            string guid = Safe(() => attr.GetType().GetProperty("GUID")?.GetValue(attr)?.ToString());
-                            string name = Safe(() => attr.GetType().GetProperty("Name")?.GetValue(attr)?.ToString());
-                            string version = Safe(() => attr.GetType().GetProperty("Version")?.GetValue(attr)?.ToString());
-                            string key = asm.GetName().Name + "|" + guid;
-                            if (seen.Add(key))
-                                lines.Add("      - " + (string.IsNullOrEmpty(name) || name == "unknown" ? asm.GetName().Name : name)
-                                    + " [" + guid + "] v" + version);
-                            break;
-                        }
+                        loaded.Add(n);
                     }
-                    catch { }
+                }
+                catch { }
+            }
+        }
+        catch { }
+
+        try
+        {
+            string dir = Path.Combine(Paths.GameRootPath, "BepInEx", "plugins");
+            if (Directory.Exists(dir))
+            {
+                string[] files = Directory.GetFiles(dir, "*.dll", SearchOption.TopDirectoryOnly);
+                System.Array.Sort(files, StringComparer.OrdinalIgnoreCase);
+                foreach (string f in files)
+                {
+                    string file = Path.GetFileNameWithoutExtension(f);
+                    lines.Add("      - " + file + (loaded.Contains(file) ? "  (loaded)" : "  (not loaded)"));
+                }
+
+                if (lines.Count > 0)
+                {
+                    return lines;
                 }
             }
         }
         catch { }
+
+        // The plugins folder was unreadable or empty - fall back to whatever is loaded.
+        foreach (string n in loaded)
+        {
+            lines.Add("      - " + n + "  (loaded)");
+        }
+
+        if (lines.Count == 0)
+        {
+            lines.Add("      (none found)");
+        }
+
         return lines;
     }
-
     private static string GetRecentConsole()
     {
         try

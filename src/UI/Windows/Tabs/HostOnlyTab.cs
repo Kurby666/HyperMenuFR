@@ -41,6 +41,14 @@ public class HostOnlyTab : ITab
 
             DrawMeetings();
 
+            GUILayout.Space(15);
+
+            DrawHideAndSeek();
+
+            GUILayout.Space(15);
+
+            DrawColors();
+
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
@@ -89,6 +97,29 @@ public class HostOnlyTab : ITab
         CheatToggles.forceStartGame = GUILayout.Toggle(CheatToggles.forceStartGame, " Force Start Game");
 
         CheatToggles.noGameEnd = GUILayout.Toggle(CheatToggles.noGameEnd, " No Game End");
+
+        CheatToggles.unlockStartButton = GUILayout.Toggle(CheatToggles.unlockStartButton, " Unlock Start Button");
+
+        CheatToggles.startOnEnter = GUILayout.Toggle(CheatToggles.startOnEnter, " Start On Enter");
+
+        if (CheatToggles.startOnEnter)
+            CheatToggles.instantStart = GUILayout.Toggle(CheatToggles.instantStart, " Instant Start");
+    }
+
+    private void DrawHideAndSeek()
+    {
+        GUILayout.Label("Hide & Seek", GUIStylePreset.TabSubtitle);
+
+        CheatToggles.customSeekers = GUILayout.Toggle(CheatToggles.customSeekers, " Custom Seekers");
+        if (CheatToggles.customSeekers)
+        {
+            GUILayout.Label($"Seekers: {Mathf.Clamp(CheatToggles.seekerCount, 1, 15)}");
+            CheatToggles.seekerCount = Mathf.Clamp((int)GUILayout.HorizontalSlider(CheatToggles.seekerCount, 1, 15), 1, 15);
+        }
+
+        CheatToggles.noSeekerHeadStart = GUILayout.Toggle(CheatToggles.noSeekerHeadStart, " Seeker: Skip Head Start");
+
+        CheatToggles.fourImpostors = GUILayout.Toggle(CheatToggles.fourImpostors, " 4 Impostors (9+ players)");
     }
 
     private void DrawMeetings()
@@ -100,5 +131,42 @@ public class HostOnlyTab : ITab
         CheatToggles.voteImmune = GUILayout.Toggle(CheatToggles.voteImmune, " Vote Immune");
 
         CheatToggles.ejectPlayer = GUILayout.Toggle(CheatToggles.ejectPlayer, " Eject Player");
+    }
+
+    private void DrawColors()
+    {
+        GUILayout.Label("Colors", GUIStylePreset.TabSubtitle);
+
+        CheatToggles.colorAll = GUILayout.Toggle(CheatToggles.colorAll, " Force One Color on All");
+        if (CheatToggles.colorAll)
+        {
+            GUILayout.Label($"Forced color: {CheatToggles.colorAllId}");
+            CheatToggles.colorAllId = Mathf.Clamp((int)GUILayout.HorizontalSlider(CheatToggles.colorAllId, 0, Cheats.ColorTools.MaxColor()), 0, Cheats.ColorTools.MaxColor());
+        }
+
+        CheatToggles.colorReservations = GUILayout.Toggle(CheatToggles.colorReservations, " Reserve Colors (FriendCode file)");
+
+        var reservations = Cheats.ColorTools.Reservations();
+        if (reservations.Count > 0)
+        {
+            GUILayout.Label($"Reservations ({reservations.Count}):");
+            // Copy to array so removal during iteration cannot break the layout loop.
+            var list = new System.Collections.Generic.List<Cheats.ColorTools.Reservation>(reservations);
+            string removeFc = null;
+            foreach (var entry in list)
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Label($"{entry.Name}: {entry.ColorId}", GUILayout.Width(MenuUI.windowWidth * 0.22f));
+                if (GUILayout.Button("X"))
+                {
+                    removeFc = entry.Fc;
+                }
+                GUILayout.EndHorizontal();
+            }
+            if (removeFc != null)
+            {
+                MalumMenu.notifications.Send("Colors", Cheats.ColorTools.Unreserve(removeFc));
+            }
+        }
     }
 }

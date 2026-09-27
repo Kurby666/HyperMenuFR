@@ -7,6 +7,7 @@ public class ConsoleTab : ITab
 {
     private const int HandlingId = 60006;
     public string name => "Console";
+    private string judgeFeedback = "";
 
     public void Draw()
     {
@@ -34,5 +35,20 @@ public class ConsoleTab : ITab
         CheatToggles.logTasks = GUILayout.Toggle(CheatToggles.logTasks, " Log Tasks");
 
         CheatToggles.logGameState  = GUILayout.Toggle(CheatToggles.logGameState, " Log Game State");
+
+        CheatToggles.judgeWatch = GUILayout.Toggle(CheatToggles.judgeWatch, " Watch Judge Overrules");
+
+        if (JudgeWatcher.Lines.Count > 0)
+        {
+            GUILayout.Label("Overrules this meeting: " + JudgeWatcher.Lines.Count + " (total " + JudgeWatcher.Total + ")");
+            foreach (string line in JudgeWatcher.Lines)
+                GUILayout.Label("  " + line);
+        }
+
+        if (GUILayout.Button("CLEAR QUEUE (HOST)"))
+            judgeFeedback = JudgeWatcher.ClearAll();
+
+        if (!string.IsNullOrEmpty(judgeFeedback))
+            GUILayout.Label(judgeFeedback);
     }
 }

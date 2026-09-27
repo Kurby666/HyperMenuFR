@@ -58,5 +58,50 @@ public class AnimationsTab : ITab
         GUILayout.Label("Client-Sided", GUIStylePreset.TabSubtitle);
 
         CheatToggles.moonWalk = GUILayout.Toggle(CheatToggles.moonWalk, " Moonwalk");
+
+        GUILayout.Space(5);
+        GUILayout.Label("Animation Loops (local)", GUIStylePreset.TabSubtitle);
+
+        GUILayout.BeginHorizontal();
+        if(GUILayout.Button($"Climb Up{(Cheats.AnimLoops.Active(Cheats.AnimLoop.ClimbUp) ? " (on)" : "")}"))
+            Cheats.AnimLoops.Toggle(Cheats.AnimLoop.ClimbUp);
+        if(GUILayout.Button($"Climb Down{(Cheats.AnimLoops.Active(Cheats.AnimLoop.ClimbDown) ? " (on)" : "")}"))
+            Cheats.AnimLoops.Toggle(Cheats.AnimLoop.ClimbDown);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if(GUILayout.Button($"Enter Vent{(Cheats.AnimLoops.Active(Cheats.AnimLoop.EnterVent) ? " (on)" : "")}"))
+            Cheats.AnimLoops.Toggle(Cheats.AnimLoop.EnterVent);
+        if(GUILayout.Button($"Exit Vent{(Cheats.AnimLoops.Active(Cheats.AnimLoop.ExitVent) ? " (on)" : "")}"))
+            Cheats.AnimLoops.Toggle(Cheats.AnimLoop.ExitVent);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if(GUILayout.Button($"Jump{(Cheats.AnimLoops.Active(Cheats.AnimLoop.Jump) ? " (on)" : "")}"))
+            Cheats.AnimLoops.Toggle(Cheats.AnimLoop.Jump);
+        if(GUILayout.Button($"Spawn{(Cheats.AnimLoops.Active(Cheats.AnimLoop.Spawn) ? " (on)" : "")}"))
+            Cheats.AnimLoops.Toggle(Cheats.AnimLoop.Spawn);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if(GUILayout.Button("Mushroom In"))
+            Cheats.AnimLoops.MushroomIn();
+        if(GUILayout.Button("Mushroom Out"))
+            Cheats.AnimLoops.MushroomOut();
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if(GUILayout.Button("Alert Flash"))
+            Cheats.AnimLoops.AlertFlash();
+        if(GUILayout.Button("Meeting Sting"))
+            Cheats.AnimLoops.MeetingSting();
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if(GUILayout.Button("Eject Sound"))
+            Cheats.AnimLoops.EjectSfx();
+        if(GUILayout.Button("Stop All Loops"))
+            Cheats.AnimLoops.ResetAll();
+        GUILayout.EndHorizontal();
     }
 }

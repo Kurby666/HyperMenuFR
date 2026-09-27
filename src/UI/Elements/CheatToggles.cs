@@ -31,6 +31,7 @@ public struct CheatToggles
     public static bool noTrackingDelay;
     public static bool trackReach;
     public static bool interrogateReach;
+    public static bool commsBypass;
     public static bool noVitalsCooldown;
     public static bool noVentCooldown;
     public static bool endlessVentTime;
@@ -38,6 +39,18 @@ public struct CheatToggles
     public static bool killVanished;
     public static bool noVanishAnim;
     public static bool noShapeshiftAnim;
+    public static bool killAura;
+    public static float killAuraDist = 2.5f;
+    public static bool autoVentKill;
+    public static bool bodyToVent;
+    public static bool morphDead;
+    public static bool endlessInvis;
+    public static bool smokeSpam;
+    public static bool judgeNoTasks;
+    public static bool detNoCd;
+    public static bool seeInVents;
+    public static bool seeVanished;
+    public static bool ventNetwork;
 
     // ESP
     public static bool noShadows;
@@ -71,6 +84,18 @@ public struct CheatToggles
     public static bool colorBasedTracers;
     public static bool distanceBasedTracers;
 
+    // Radar
+    public static bool showRadar;
+    public static bool radarCrew = true;
+    public static bool radarImps = true;
+    public static bool radarGhosts = true;
+    public static bool radarBodies = true;
+    public static int radarRangeIdx = 1;
+    public static float radarSize = 220f;
+    public static float radarOpacity = 0.85f;
+    public static float radarX = 20f;
+    public static float radarY = 100f;
+
     // Chat
     public static bool changeChatColor;
     public static bool colorAsPlayer;
@@ -82,17 +107,198 @@ public struct CheatToggles
     public static bool lowerRateLimits;
     public static bool showGhostsChat;
     public static bool alwaysVisibleChat;
+    public static bool overheadChat;
+    public static float overheadChatTime = 6f;
+    public static int overheadChatWhere;
+    public static bool chatSpam;
+    public static float chatSpamDelay = 2f;
+    public static bool chatCmds = true;
+    public static bool colorCmd = true;
+    public static bool colorCmdNotify = true;
+    public static bool nameHistory = true;
+    public static bool notifyKnown = true;
 
     // Ship
     public static bool closeMeeting;
     public static bool autoOpenDoorsOnUse;
     public static bool unfixableLights;
     public static bool callMeeting;
+    public static bool spamMeetings;
     public static bool reportBody;
     public static bool autoReportBodies;
     public static bool kickOffensiveNames;
     public static bool fakeTasks;
     public static bool doAnyTask;
+    public static bool votekickAutoRejoin;
+    public static bool votekickProtect;
+    public static int votekickPunishIdx = 2;
+    public static bool votekickCopyCode;
+    public static bool voteSpam;
+    public static bool cameraJam;
+    public static bool autoReturnLobby;
+    public static bool enableDummies;
+    public static bool dummyDoTasks = true;
+    public static bool dummyFixSabotage = true;
+    public static bool dummyReportBodies = true;
+    public static bool cloneMode;
+    public static bool cloneShadow;
+    public static bool cloneGuard = true;
+    public static float cloneGuardRadius = 2.5f;
+    public static bool cloneDrift;
+    public static int cloneMax = 50;
+    public static int clonePerClick = 1;
+    public static int cloneColorId = -1;
+    public static float cloneScale = 1f;
+    public static int cloneFormation = 4;
+    public static float cloneFormationScale = 1f;
+    public static int cloneFormationCopies = 1;
+    public static bool cloneAnim = true;
+    public static float cloneAnimSpeed = 1f;
+    public static bool cloneNaked;
+    public static bool netCloneMode;
+    public static int netCloneCount = 6;
+
+    // Self
+    public static bool invisible;
+    public static bool invisiblePoof = true;
+    public static bool mirage;
+    public static bool mirageFreeze;
+    public static bool mirageFlicker = true;
+    public static int mirageFlickerMin = 2;
+    public static int mirageFlickerMax = 4;
+    public static bool mouseSelect;
+    public static bool selfDrag;
+    public static bool selfDragSmooth = true;
+    public static float selfDragSpeed = 3f;
+    public static bool ghostAfterStart;
+    public static bool worldTilt;
+    public static float worldTiltAngle = 90f;
+    public static bool neonOutline;
+    public static int neonMode;
+    public static bool autoTasks;
+    public static float autoTasksDelay = 1.5f;
+    public static bool outfitResetMatch;
+    public static bool outfitResetLobby;
+    public static int outfitFavSlot;
+    public static bool antWalk;
+    public static float antWalkStep = 0.35f;
+    public static float antWalkTwitch = 0.06f;
+    public static bool glideForOthers;
+    public static bool platformUnlock;
+    public static bool snipeColor;
+    public static int snipeColorId;
+    public static bool colorAll;
+    public static int colorAllId;
+    public static bool colorReservations;
+    public static bool nameColor;
+    public static int nameColorStyle;
+    public static bool nameColorAnimated = true;
+
+    // Start controls and hide and seek
+    public static bool unlockStartButton;
+    public static bool startOnEnter;
+    public static bool instantStart;
+    public static bool customSeekers;
+    public static int seekerCount = 2;
+    public static bool noSeekerHeadStart;
+    public static bool fourImpostors;
+
+    // Auto-host
+    public static bool autoHost;
+    public static int autoHostMinPlayers = 4;
+    public static int autoHostStartDelay = 15;
+    public static int autoHostBackoff = 8;
+    public static bool autoHostInstant = true;
+    public static int autoHostWarmup = 5;
+    public static int autoHostLoadGrace = 20;
+    public static int autoHostFastStartPlayers = 13;
+    public static int autoHostFastStartDelay = 5;
+    public static int autoHostForceAfterMinutes;
+    public static int autoHostForceMinPlayers = 2;
+    public static bool autoHostCancelBelowMin = true;
+    public static bool autoHostWaitLoad = true;
+    public static bool autoHostReturn = true;
+    public static bool autoHostForceLastMinute = true;
+    public static bool autoHostNotify = true;
+
+    // Lobby browser and music
+    public static bool richLobbyRows;
+    public static bool muteLobbyMusic;
+
+    // Access lists and join gate
+    public static bool accessBanEnabled;
+    public static bool accessWhitelistOnly;
+    public static bool accessNickBanEnabled;
+    public static bool accessPlatformBanEnabled;
+    public static bool minLevelEnabled;
+    public static int minLevel = 1;
+    public static bool maxLevelEnabled;
+    public static int maxLevel = 5000;
+    public static int levelActionIdx = 2;
+    public static bool kickFortegreen;
+
+    // Join intel
+    public static bool joinIntel;
+    public static bool joinIntelToasts = true;
+
+    // Event notifications and log
+    public static bool mirrorEventsToConsole = true;
+    public static bool notifyKills;
+    public static bool notifyMeetings;
+    public static bool notifySabotage;
+    public static bool notifyVents;
+    public static bool notifyRoles;
+    public static bool notifyReports;
+    public static bool notifyEjects;
+    public static bool notifyVotekicks;
+    public static bool showEventLog;
+
+    // Match replay
+    public static bool showReplay;
+    public static bool replayPlayback;
+    public static bool replayClearAfterMeeting;
+
+    // Guards
+    public static bool modDetectToast;
+    public static bool rpcGuard;
+    public static bool rpcGuardToast = true;
+    public static int rpcGuardActionIdx = 2;
+    public static bool antiBanHost;
+    public static bool blockForcedVents;
+    public static bool blockForcedZipline;
+    public static bool blockFakeMeetings;
+    public static bool blockSpawnFloods;
+    public static bool securityNotify = true;
+
+	// Body mode, chat extras, ban words, xmas, friend code spoof
+	public static int bodyModeIdx = 0;
+	public static bool noChatCooldown = false;
+	public static bool chatTimestamps = false;
+	public static bool chatSenderInfo = true;
+	public static bool darkChatTheme = true;
+	public static int chatHistorySize = 32;
+	public static bool banWords = false;
+	public static bool xmasHostCommand = true;
+	public static bool fcSpoofEnabled = false;
+
+	// Status HUD
+	public static bool gradientStamp = true;
+	public static bool showFps;
+	public static bool showLobbyTimer;
+	public static bool showHostLine;
+	public static bool radialMenu;
+
+	// Glich Rooms bot
+	public static bool glichCycle;
+	public static bool glichHunt;
+	public static bool glichLog;
+	public static float glichDelay = 3f;
+
+	// Master switch for BOTH hotkey systems: the per-cheat Keybinds dictionary polled by
+	// Components/KeybindListener.cs and the 37 action hotkeys dispatched by Cheats/Hotkeys.cs
+	// (whose radial menu routes through the same Down/Held guards). Default is on so existing
+	// profiles behave exactly as before.
+	public static bool hotkeysEnabled = true;
 
     // Sabotage
     public static bool commsSab;
@@ -101,6 +307,20 @@ public struct CheatToggles
     public static bool oxygenSab;
     public static bool mushSab;
     public static bool mushSpore;
+    public static bool spamMainSab;
+    public static bool keepLightsOff;
+    public static bool infMushroom;
+    public static bool multiSabotage;
+    public static bool autoFixSabotage;
+    public static bool consoleReach;
+    public static float consoleDist = 4f;
+    public static bool skipDecon;
+    public static bool airshipSpawn;
+    public static int airshipSpawnId;
+    public static bool taskDrain;
+    public static float taskDrainStep = 0.25f;
+    public static int frameSystemIdx;
+    public static int frameValue = 128;
     public static bool showDoorsMenu;
     public static bool openAllDoors;
     public static bool closeAllDoors;
@@ -112,6 +332,10 @@ public struct CheatToggles
     public static bool unlockVents;
     public static bool walkInVents;
     public static bool kickVents;
+    public static bool ventTpAuto;
+    public static float ventTpAutoDelay = 2f;
+    public static int ventTpMode;
+    public static bool impTrap;
 
     // Animations
     public static bool animShields;
@@ -152,6 +376,7 @@ public struct CheatToggles
     public static bool logVents;
     public static bool logTasks;
     public static bool logGameState;
+    public static bool judgeWatch;
 
     // Host-Only
     public static bool voteImmune;

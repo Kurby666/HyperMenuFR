@@ -14,6 +14,10 @@
     </ItemGroup>-->
 
     <ItemGroup>
+        <EmbeddedResource Include=".\grid\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" Private="false" ExcludeAssets="runtime;native" />
         <PackageReference Include="AmongUs.GameLibs.Steam" Version="2026.8.18" PrivateAssets="all" />
 

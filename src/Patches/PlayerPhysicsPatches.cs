@@ -22,6 +22,11 @@ public static class PlayerPhysics_LateUpdate
             MalumCheats.KillAllImpsCheat();
             MalumCheats.ForceStartGameCheat();
             MalumCheats.TeleportCursorCheat();
+            MouseTools.Tick();
+            GhostTools.Tick();
+            NeonOutline.Tick();
+            Cheats.MatchReplay.Tick();
+            Cheats.LobbyPranks.LateTick();
             MalumCheats.CompleteMyTasksCheat();
             MalumCheats.CompleteAllTasksCheat();
             MalumCheats.PlayAnimationCheat();

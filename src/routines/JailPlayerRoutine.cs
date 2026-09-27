@@ -15,6 +15,41 @@ namespace MalumMenu.routines
         public float delay = 0.5f;
         private float timeElapsed = 0f;
 
+        public int SelectedCount => targets.Count;
+
+        public bool IsSelected(PlayerControl player) => player != null && targets.Contains(player.GetHashCode());
+
+        public void ToggleSelect(PlayerControl player)
+        {
+            if (player == null) return;
+            int key = player.GetHashCode();
+            if (!targets.Remove(key))
+            {
+                targets.Add(key);
+                Enabled = true;
+            }
+            else if (targets.Count == 0)
+            {
+                Enabled = false;
+            }
+        }
+
+        public void SelectAll()
+        {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player == PlayerControl.LocalPlayer) continue;
+                targets.Add(player.GetHashCode());
+            }
+            Enabled = true;
+        }
+
+        public void ClearSelection()
+        {
+            targets.Clear();
+            Enabled = false;
+        }
+
         public override void Run()
         {
             try

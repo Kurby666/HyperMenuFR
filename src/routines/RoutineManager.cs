@@ -36,6 +36,22 @@ namespace MalumMenu.routines
 
                     routine.Run();
                 }
+
+                VotekickTools.Tick();
+                Cheats.VotekickGuard.Tick();
+                Cheats.ColorTools.Tick();
+                Cheats.LobbyTools.Tick();
+                Cheats.Dummies.Tick();
+                Cheats.ChatTools.ChatSender.Tick();
+                Cheats.NameHistory.Tick();
+                Cheats.LobbySettings.Tick();
+                Cheats.AutoHost.Tick();
+                Cheats.AccessLists.Tick();
+                Cheats.JoinIntel.Tick();
+                Cheats.EventLog.Tick();
+                Cheats.Xmas.Tick();
+                Cheats.FriendCodeTools.Tick();
+                Invisibility.Tick();
             }
             catch (Exception ex)
             {

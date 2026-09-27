@@ -33,6 +33,38 @@ namespace MalumMenu
             Self.AlwaysShowTaskAnimations = GUILayout.Toggle(Self.AlwaysShowTaskAnimations, "Always Show Task Animations");
             Self.NoLadderCooldown.Enabled = GUILayout.Toggle(Self.NoLadderCooldown.Enabled, "No Ladder Cooldown");
             Self.UnlimitedMeetings.enabled = GUILayout.Toggle(Self.UnlimitedMeetings.enabled, "Unlimited Meetings");
+            CheatToggles.invisible = GUILayout.Toggle(CheatToggles.invisible, "Invisibility (off-map net pos)");
+            CheatToggles.invisiblePoof = GUILayout.Toggle(CheatToggles.invisiblePoof, "Phantom Poof");
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Phantom In Lobby"))
+            {
+                Invisibility.LobbyPhantom.Vanish();
+            }
+
+            if (GUILayout.Button("Appear"))
+            {
+                Invisibility.LobbyPhantom.Appear();
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(5);
+            GUILayout.Label("Mirage (desync: you move normally, others see frozen/jitter):");
+            CheatToggles.mirage = GUILayout.Toggle(CheatToggles.mirage, "Enable Mirage");
+            if (CheatToggles.mirage)
+            {
+                CheatToggles.mirageFreeze = GUILayout.Toggle(CheatToggles.mirageFreeze, "Freeze frame (frozen to others)");
+                CheatToggles.mirageFlicker = GUILayout.Toggle(CheatToggles.mirageFlicker, "Flicker (broken signal)");
+                if (CheatToggles.mirageFlicker)
+                {
+                    GUILayout.Label($"Flicker min (frames): {CheatToggles.mirageFlickerMin}");
+                    CheatToggles.mirageFlickerMin = (int)GUILayout.HorizontalSlider(CheatToggles.mirageFlickerMin, 1, 30);
+                    GUILayout.Label($"Flicker max (frames): {CheatToggles.mirageFlickerMax}");
+                    CheatToggles.mirageFlickerMax = (int)GUILayout.HorizontalSlider(CheatToggles.mirageFlickerMax, 1, 30);
+                    if (CheatToggles.mirageFlickerMax < CheatToggles.mirageFlickerMin)
+                        CheatToggles.mirageFlickerMax = CheatToggles.mirageFlickerMin;
+                }
+            }
 
             if (GUILayout.Button("Call Meeting"))
             {
@@ -47,9 +79,29 @@ namespace MalumMenu
                 }
             }
 
+            GUILayout.Space(5);
+            GUILayout.Label("Ghost:");
+            CheatToggles.ghostAfterStart = GUILayout.Toggle(CheatToggles.ghostAfterStart, "Ghost After Start (die locally on spawn)");
+            if (GUILayout.Button("SUICIDE (IMPOSTOR)"))
+            {
+                MalumMenu.notifications.Send("Suicide", GhostTools.SuicideNow(), 2.5f);
+            }
+            if (GUILayout.Button("LEAVE A BODY (HOST)"))
+            {
+                string err = Cheats.LeaveBody.Drop();
+                MalumMenu.notifications.Send("Leave A Body", err ?? "Body dropped, reviving...", 2.5f);
+            }
+
             if (GUILayout.Button("Complete All Tasks"))
             {
                 PlayerControl.LocalPlayer.StartCoroutine(ErrorReporter.GuardCoroutine(CompleteAllTasks(), HandlingId, "CompleteAllTasks").WrapToIl2Cpp());
+            }
+
+            CheatToggles.autoTasks = GUILayout.Toggle(CheatToggles.autoTasks, " Auto-Complete Tasks (one by one)");
+            if (CheatToggles.autoTasks)
+            {
+                GUILayout.Label($"  Gap Between Tasks: {Mathf.Max(0.8f, CheatToggles.autoTasksDelay):F1}s ({Cheats.AutoTasks.Left()} left)");
+                CheatToggles.autoTasksDelay = GUILayout.HorizontalSlider(CheatToggles.autoTasksDelay, 0.8f, 6f);
             }
 
             if (GUILayout.Button("Randomize Avatar"))
@@ -67,6 +119,61 @@ namespace MalumMenu
 
                     MalumMenu.notifications.Send("Player Randomizer", "Your name and avatar has been randomized.", 5);
                 }
+            }
+
+            GUILayout.Label("Body Mode:");
+            if (GUILayout.Button($" Body: {Cheats.BodyMode.ModeName()}"))
+            {
+                Cheats.BodyMode.Cycle();
+            }
+            GUILayout.Label("Client-side cosmetic only — others see it on your body.");
+
+            GUILayout.Label("Outfits:");
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Classic Look"))
+            {
+                MalumMenu.notifications.Send("Outfit", Cheats.OutfitTools.ClassicLook());
+            }
+            if (GUILayout.Button($"Apply Fav {CheatToggles.outfitFavSlot + 1}"))
+            {
+                MalumMenu.notifications.Send("Outfit", Cheats.OutfitTools.ApplyFavorite(CheatToggles.outfitFavSlot));
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button($"Save Fav {CheatToggles.outfitFavSlot + 1}"))
+            {
+                MalumMenu.notifications.Send("Outfit", Cheats.OutfitTools.CaptureFavorite(CheatToggles.outfitFavSlot));
+            }
+            if (GUILayout.Button($"Fav Slot: {CheatToggles.outfitFavSlot + 1}"))
+            {
+                CheatToggles.outfitFavSlot = (CheatToggles.outfitFavSlot + 1) % 4;
+            }
+            GUILayout.EndHorizontal();
+            CheatToggles.outfitResetMatch = GUILayout.Toggle(CheatToggles.outfitResetMatch, " Reset to Fav on Match Start");
+            CheatToggles.outfitResetLobby = GUILayout.Toggle(CheatToggles.outfitResetLobby, " Reset to Fav on Lobby Join");
+
+            GUILayout.Label("Colors:");
+            CheatToggles.snipeColor = GUILayout.Toggle(CheatToggles.snipeColor, " Snipe Color in Lobby (auto-grab when free)");
+            GUILayout.Label($"Sniped color: {CheatToggles.snipeColorId}");
+            CheatToggles.snipeColorId = Mathf.Clamp((int)GUILayout.HorizontalSlider(CheatToggles.snipeColorId, 0, Cheats.ColorTools.MaxColor()), 0, Cheats.ColorTools.MaxColor());
+            CheatToggles.nameColor = GUILayout.Toggle(CheatToggles.nameColor, " Colored Name (local rainbow/preset nick)");
+            if (CheatToggles.nameColor)
+            {
+                if (GUILayout.Button($"Style: {Cheats.ColorTools.StyleName(CheatToggles.nameColorStyle)}"))
+                {
+                    CheatToggles.nameColorStyle = (CheatToggles.nameColorStyle + 1) % Cheats.ColorTools.NamePresetCount;
+                }
+                CheatToggles.nameColorAnimated = GUILayout.Toggle(CheatToggles.nameColorAnimated, " Animated Name");
+                GUILayout.Label("(Hidden while ESP role/player info nametags are on.)");
+            }
+
+            GUILayout.Label("Your Past Nicks:");
+            CheatToggles.nameHistory = GUILayout.Toggle(CheatToggles.nameHistory, " Track Nick History (by friend code)");
+            CheatToggles.notifyKnown = GUILayout.Toggle(CheatToggles.notifyKnown, " Notify Known Players + Nick Changes");
+            foreach (string nick in Cheats.NameHistory.OwnNicks())
+            {
+                GUILayout.Label("- " + nick);
             }
 
             GUILayout.Label("Task Animations:");

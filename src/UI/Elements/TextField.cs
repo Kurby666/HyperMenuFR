@@ -6,12 +6,34 @@ public class TextField
 {
     private string _content = "";
     private bool _focused = false;
+
+    // The instance that currently owns keyboard focus, so input consumers (KeybindListener) can
+    // tell that the user is typing into a field and must not also fire a bound cheat key.
+    private static TextField _active;
     private float _lastBlinkTime = 0f;
     private bool _cursorVisible = true;
     private Rect _fieldRect = Rect.zero;
     private float _cursorBlinkTime = 0.5f;
 
-    public bool IsFocused => _focused;
+    public static bool AnyFocused => _active != null;
+
+    public bool IsFocused
+    {
+        get => _focused;
+        set
+        {
+            _focused = value;
+
+            if (value)
+            {
+                _active = this;
+            }
+            else if (_active == this)
+            {
+                _active = null;
+            }
+        }
+    }
     public string Content
     {
         get => _content;
@@ -37,14 +59,14 @@ public class TextField
         {
             if (_fieldRect.Contains(Event.current.mousePosition))
             {
-                _focused = true;
+                IsFocused = true;
                 _lastBlinkTime = Time.time;
                 _cursorVisible = true;
                 Event.current.Use();
             }
             else
             {
-                _focused = false;
+                IsFocused = false;
             }
         }
 
@@ -89,6 +111,6 @@ public class TextField
 
     public void Unfocus()
     {
-        _focused = false;
+        IsFocused = false;
     }
 }

@@ -7,5 +7,7 @@ public enum WindowId
     RolesUI = 4,
     ProtectUI = 5,
     OverloadUI = 6,
-    StreamerUI = 7
+    StreamerUI = 7,
+    EventLogUI = 8,
+    ReplayUI = 9
 }

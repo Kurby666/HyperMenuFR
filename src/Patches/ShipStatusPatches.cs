@@ -17,10 +17,26 @@ public static class ShipStatus_FixedUpdate
             MalumCheats.CloseMeetingCheat();
             MalumCheats.SkipMeetingCheat();
             MalumCheats.CallMeetingCheat();
+            MeetingTools.SpamMeetingsCheat();
             MalumCheats.WalkInVentCheat();
             MalumCheats.KickVentsCheat();
 
             MalumCheats.DoAnyTaskCheat();
+
+            VentKick.Tick();
+            VentTpTools.Tick();
+            GodMode.Tick();
+            Cheats.PlatformRide.Tick();
+            Cheats.SabotageSpam.Tick();
+            Cheats.TaskDrain.Tick();
+            Cheats.AutoTasks.Tick();
+            Cheats.SmokeSpam.Tick();
+            Cheats.LeaveBody.Tick();
+            Cheats.CameraJammer.Tick();
+            Cheats.RoleBuffs.AuraTick();
+            Cheats.AutoVent.Tick();
+            Cheats.VoteSpam.Tick();
+            Cheats.LobbyPranks.Tick();
 
             MalumPPMCheats.ReportBodyPPM();
         }
