@@ -224,12 +224,12 @@ public static class PingTracker_Update
             {
                 __instance.aspectPosition.DistanceFromEdge = new Vector3(-0.21f, 0.50f, 0f);
 
-                __instance.text.text = $"HyperMenu by Simon McLaurin\nMalumMenu by scp222thj & Astral ~ {Utils.GetColoredPingText($"PING : {AmongUsClient.Instance.Ping} ms", AmongUsClient.Instance.Ping)}";
+                __instance.text.text = $"HyperMenu by ADHyperActive McLaurin\nMalumMenu by scp222thj & Astral ~ {Utils.GetColoredPingText($"PING : {AmongUsClient.Instance.Ping} ms", AmongUsClient.Instance.Ping)}";
 
                 return;
             }
 
-            __instance.text.text = $"HyperMenu by Simon McLaurin\nMalumMenu by scp222thj & Astral\n{Utils.GetColoredPingText($"PING : {AmongUsClient.Instance.Ping} ms", AmongUsClient.Instance.Ping)}";
+            __instance.text.text = $"HyperMenu by ADHyperActive McLaurin\nMalumMenu by scp222thj & Astral\n{Utils.GetColoredPingText($"PING : {AmongUsClient.Instance.Ping} ms", AmongUsClient.Instance.Ping)}";
 
         }
         catch (Exception ex) { ErrorReporter.Report(ex, HandlingId, "PingTracker_Update.Postfix: show ping text"); }

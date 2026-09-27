@@ -120,7 +120,7 @@ namespace MalumMenu.Cheats
 			{
 				_brand[p] = Tint(sb, Brand, p, 0, true);
 				_ver[p] = Tint(sb, "v" + MalumMenu.hyperVersion, p, 13, false);
-				_by[p] = Tint(sb, "by Simon", p, 20, false);
+				_by[p] = Tint(sb, "by ADHyperActive", p, 20, false);
 				_ping[p] = Tint(sb, "PING", p, 35, false);
 				_ms[p] = Tint(sb, "ms", p, 43, false);
 				_fps[p] = Tint(sb, "FPS", p, 49, false);
