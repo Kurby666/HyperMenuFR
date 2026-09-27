@@ -140,9 +140,184 @@ public class PlayersTab : ITab
             }
         }
 
+        if (GUILayout.Button(Cheats.LobbyPranks.LoopLeft > 0 ? $"STOP Murder Loop ({Cheats.LobbyPranks.LoopLeft} left)" : "Murder Loop x20 (HOST)"))
+        {
+            MalumMenu.notifications.Send("Pranks", Cheats.LobbyPranks.MurderLoop(target, 20));
+        }
+
         if (GUILayout.Button("Copy Avatar"))
         {
             Utilities.CopyPlayer(target);
+        }
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Steal Outfit"))
+        {
+            MalumMenu.notifications.Send("Outfit", Cheats.OutfitTools.StealOutfit(target));
+        }
+        if (GUILayout.Button("Force My Outfit (HOST)"))
+        {
+            MalumMenu.notifications.Send("Outfit", Cheats.OutfitTools.SetOutfitOnTarget(target));
+        }
+        GUILayout.EndHorizontal();
+
+        if (GUILayout.Button("Reserve Color (HOST)"))
+        {
+            MalumMenu.notifications.Send("Colors", Cheats.ColorTools.ReserveTarget(target));
+        }
+
+        GUILayout.BeginHorizontal();
+        string morphSelectLabel = Cheats.MorphTools.IsSelected(target.PlayerId) ? "Unselect Morph" : "Select Morph";
+        if (GUILayout.Button(morphSelectLabel))
+        {
+            Cheats.MorphTools.ToggleSelect(target.PlayerId);
+        }
+        if (GUILayout.Button("MORPH INTO THIS (HOST)"))
+        {
+            MalumMenu.notifications.Send("Morph", Cheats.MorphTools.IntoSelected(target));
+        }
+        GUILayout.EndHorizontal();
+        if (GUILayout.Button("Revert All Morphs (HOST)"))
+        {
+            MalumMenu.notifications.Send("Morph", Cheats.MorphTools.RevertAll());
+        }
+        if (GUILayout.Button("CLONE (HOST)"))
+        {
+            MalumMenu.notifications.Send("Clones", Cheats.NetworkedClones.CloneOf(target));
+        }
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button($"Force Role: {Cheats.ForceRoles.Name(Cheats.ForceRoles.IndexOf(target.PlayerId))}"))
+        {
+            Cheats.ForceRoles.Cycle(target.PlayerId);
+        }
+        if (GUILayout.Button("SET ROLE (HOST)"))
+        {
+            MalumMenu.notifications.Send("Force Role", Cheats.ForceRoles.ForceNow(target.PlayerId));
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("WHISPER"))
+        {
+            Cheats.ChatTools.Whisper.Prefill(Cheats.ChatTools.MuteList.Strip(target.Data.PlayerName));
+        }
+        string muteLabel = Cheats.ChatTools.MuteList.IsMuted(target) ? "UNMUTE" : "MUTE";
+        if (GUILayout.Button(muteLabel))
+        {
+            MalumMenu.notifications.Send("Mute", Cheats.ChatTools.MuteList.Toggle(target));
+        }
+        GUILayout.EndHorizontal();
+
+        if (GUILayout.Button("Ender"))
+        {
+            MalumMenu.notifications.Send("Enderman", EndermanKill.Kill(target));
+        }
+
+        GUILayout.BeginHorizontal();
+        string blindSelectLabel = BlindTools.IsSelected(target.PlayerId) ? "Unselect Blind" : "Select Blind";
+        if (GUILayout.Button(blindSelectLabel))
+        {
+            BlindTools.ToggleSelect(target.PlayerId);
+        }
+        if (GUILayout.Button($"BLIND: {BlindTools.StateName(target.PlayerId)}"))
+        {
+            MalumMenu.notifications.Send("Blind", BlindTools.Cycle(target));
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        string ventKickLabel = VentKick.IsSelected(target.PlayerId) ? "Unselect Vent-Kick" : "Select Vent-Kick";
+        if (GUILayout.Button(ventKickLabel))
+        {
+            VentKick.ToggleSelect(target.PlayerId);
+        }
+        if (GUILayout.Button("KICK"))
+        {
+            MalumMenu.notifications.Send("Vent Kick", VentKick.Kick(target));
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        string ventTpLabel = VentTpTools.IsMarked(target.PlayerId) ? "Unselect Vent-TP" : "Select Vent-TP";
+        if (GUILayout.Button(ventTpLabel))
+        {
+            VentTpTools.ToggleMark(target.PlayerId);
+        }
+        if (GUILayout.Button($"VENT {VentTpTools.Vent}"))
+        {
+            MalumMenu.notifications.Send("Vent-TP", VentTpTools.Send(target, VentTpTools.Vent));
+        }
+        GUILayout.EndHorizontal();
+
+        string jailLabel = MalumMenu.routines.jailPlayer.IsSelected(target) ? "UNJAIL" : "JAIL";
+        if (GUILayout.Button(jailLabel))
+        {
+            MalumMenu.routines.jailPlayer.ToggleSelect(target);
+        }
+
+        string godLabel = GodMode.IsGranted(target.PlayerId) ? "UNGOD" : "GOD";
+        if (GUILayout.Button(godLabel))
+        {
+            MalumMenu.notifications.Send("God Mode", GodMode.Toggle(target));
+        }
+
+        GUILayout.BeginHorizontal();
+        string vkTargetLabel = VotekickTools.IsTarget(target.PlayerId) ? "AUTO ✓" : "AUTO";
+        if (GUILayout.Button(vkTargetLabel))
+        {
+            VotekickTools.ToggleTarget(target.PlayerId);
+        }
+        if (GUILayout.Button("VOTE"))
+        {
+            VotekickTools.VoteOne(target);
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("GO"))
+        {
+            routines.PlayerFollowerRoutine.GoTo(target);
+        }
+        string followLabel = MalumMenu.routines.playerFollower.IsFollowing(target) ? "STOP" : "FOLLOW";
+        if (GUILayout.Button(followLabel))
+        {
+            MalumMenu.notifications.Send("Follow", MalumMenu.routines.playerFollower.Toggle(target));
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        string petLabel = Cheats.PetHand.IsTarget(target.PlayerId) ? "PETTING ✓" : "PET";
+        if (GUILayout.Button(petLabel))
+        {
+            MalumMenu.notifications.Send("Pet Hand", Cheats.PetHand.Grab(target));
+        }
+        string petFollowLabel = Cheats.PetHand.IsFollow(target.PlayerId) ? "PET-FOLLOW ✓" : "PET-FOLLOW";
+        if (GUILayout.Button(petFollowLabel))
+        {
+            MalumMenu.notifications.Send("Pet Hand", Cheats.PetHand.Chase(target));
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        string rideLabel = Cheats.RideTargets.Has(target.PlayerId) ? "RIDE ✓" : "RIDE";
+        if (GUILayout.Button(rideLabel))
+        {
+            Cheats.RideTargets.Toggle(target.PlayerId);
+        }
+        if (GUILayout.Button("DOWN"))
+        {
+            MalumMenu.notifications.Send("Zipline", Cheats.ZiplineRide.Ride(target, true));
+        }
+        if (GUILayout.Button("UP"))
+        {
+            MalumMenu.notifications.Send("Zipline", Cheats.ZiplineRide.Ride(target, false));
+        }
+        GUILayout.EndHorizontal();
+
+        if (GUILayout.Button($"FRAME ({Cheats.FrameSabotage.SystemName(CheatToggles.frameSystemIdx)}, {CheatToggles.frameValue})"))
+        {
+            MalumMenu.notifications.Send("Frame Sabotage", Cheats.FrameSabotage.Send(target, Cheats.FrameSabotage.Systems[CheatToggles.frameSystemIdx % Cheats.FrameSabotage.Systems.Length], (byte)CheatToggles.frameValue));
         }
 
         if (GUILayout.Button("Report Body"))
@@ -247,6 +422,13 @@ public class PlayersTab : ITab
                 target.Data.RpcSetTasks(Array.Empty<byte>());
             }
         }
+
+        if (GUILayout.Button("Restore Normal Tasks"))
+        {
+            string error = RestoreNormalTasks(target);
+            if (error != null)
+                MalumMenu.notifications.Send("Restore Tasks", error);
+        }
         GUILayout.EndHorizontal();
 
         GUILayout.Space(5);
@@ -301,6 +483,46 @@ public class PlayersTab : ITab
         if (GUILayout.Button("Set Color"))
         {
             target.RpcSetColor((byte)_selectedColor);
+        }
+    }
+
+    private static string RestoreNormalTasks(PlayerControl target)
+    {
+        try
+        {
+            if(!Utils.isHost || ShipStatus.Instance == null || target == null || target.Data == null)
+                return "This is a host-only cheat, and only works in a match.";
+
+            int common = 1;
+            int shortCount = 3;
+            int longCount = 1;
+
+            var ids = new System.Collections.Generic.List<byte>();
+            TakeMapTasks(ShipStatus.Instance.CommonTasks, common, ids);
+            TakeMapTasks(ShipStatus.Instance.ShortTasks, shortCount, ids);
+            TakeMapTasks(ShipStatus.Instance.LongTasks, longCount, ids);
+
+            if(ids.Count == 0)
+                return "No tasks on this map.";
+
+            target.Data.RpcSetTasks(ids.ToArray());
+            return null;
+        }
+        catch (Exception ex) { ErrorReporter.Report(ex, HandlingId, "PlayersTab.RestoreNormalTasks: restoring normal task set"); return "Failed to restore tasks."; }
+    }
+
+    private static void TakeMapTasks(Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<NormalPlayerTask> pool, int count, System.Collections.Generic.List<byte> into)
+    {
+        if(pool == null)
+            return;
+        int n = 0;
+        for(int i = 0; i < pool.Length && n < count; i++)
+        {
+            NormalPlayerTask t = pool[i];
+            if(t == null)
+                continue;
+            into.Add((byte)t.Index);
+            n++;
         }
     }
 

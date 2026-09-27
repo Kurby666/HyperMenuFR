@@ -33,6 +33,7 @@ public class MenuUI : MonoBehaviour
         _tabs.Add(new RolesTab());
         _tabs.Add(new PlayersTab());
         _tabs.Add(new ShipTab());
+        _tabs.Add(new ShipTab2());
         _tabs.Add(new SabotageTab());
         _tabs.Add(new ChatTab());
         _tabs.Add(new AnimationsTab());
@@ -67,7 +68,11 @@ public class MenuUI : MonoBehaviour
         GUI.skin.window.margin = new RectOffset { left = 8, right = 8, top = 8, bottom = 8 };
 
         GUIStylePreset.ApplyScale(MalumMenu.menuTextScale.Value);
+        Cheats.MenuTheme.Apply();
     }
+
+    private string _search = "";
+    private TextField _searchField;
 
     private void Update()
     {
@@ -239,6 +244,56 @@ public class MenuUI : MonoBehaviour
         catch (Exception ex) { ErrorReporter.Report(ex, HandlingId, "MenuUI.OnGUI: draw main menu window"); }
     }
 
+    private void DrawSearchResults()
+    {
+        List<Cheats.SearchHit> hits = Cheats.MenuSearch.Collect(_search);
+        float avail = windowWidth * 0.8f - 30f;
+        int cols = Cheats.MenuTheme.ColsFor(avail);
+        float colW = (avail - (cols - 1) * Cheats.MenuTheme.Gap) / cols;
+
+        GUILayout.Label("Search: \"" + _search + "\"  (" + hits.Count + " of " + Cheats.MenuSearch.Count + ")",
+            GUIStylePreset.TabTitle);
+        GUILayout.Box("", GUIStylePreset.Separator, GUILayout.Height(2f), GUILayout.ExpandWidth(true));
+        GUILayout.Space(6);
+
+        _contentScrollPosition = GUILayout.BeginScrollView(_contentScrollPosition, false, false);
+
+        if (hits.Count == 0)
+        {
+            GUILayout.Label("No feature matches that. Feature names come straight from the toggle list, so try a shorter word.");
+        }
+        else
+        {
+            GUILayout.BeginHorizontal();
+            for (int c = 0; c < cols; c++)
+            {
+                GUILayout.BeginVertical(GUILayout.Width(colW));
+                for (int i = c; i < hits.Count; i += cols)
+                {
+                    Cheats.SearchHit h = hits[i];
+                    if (!h.IsBool || h.Info == null)
+                    {
+                        GUILayout.Label(h.Title);
+                        continue;
+                    }
+
+                    bool v = h.Info.GetValue(null) is bool b && b;
+                    bool nv = GUILayout.Toggle(v, " " + h.Title);
+                    if (nv != v)
+                    {
+                        h.Set(nv);
+                    }
+                }
+
+                GUILayout.EndVertical();
+            }
+
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.EndScrollView();
+    }
+
     private void DisableSabotageCheats()
     {
         CheatToggles.sabotageMap = false;
@@ -291,8 +346,36 @@ public class MenuUI : MonoBehaviour
         GUILayout.BeginVertical(GUIStylePreset.ModernBox, GUILayout.Width(windowWidth * 0.8f));
         GUILayout.Space(2);
 
-        // Tab-specific content
-        if (_selectedTab >= 0 && _selectedTab < _tabs.Count)
+        // Search across every declared toggle, plus the tab and card titles. An empty box means
+        // normal tab browsing; anything else swaps the body for a columned result list where a
+        // click flips the underlying CheatToggles field directly.
+        GUILayout.BeginHorizontal();
+        // The styled GUILayout.TextField overload routes through UnityEngine.TextEditor, whose
+        // set_text is stripped from the il2cpp build ("Method unstripping failed" in the log), so
+        // use the codebase's own TextField element like SettingsTab does.
+        if (_searchField == null)
+        {
+            _searchField = new TextField(string.Empty);
+        }
+
+        _searchField.Draw(Mathf.RoundToInt(windowWidth * 0.8f) - 34, 24);
+        _search = _searchField.Content;
+
+        if (GUILayout.Button("X", GUILayout.Width(26f), GUILayout.Height(24f)))
+        {
+            _searchField.Content = string.Empty;
+            _search = string.Empty;
+            _searchField.Unfocus();
+        }
+
+        GUILayout.EndHorizontal();
+        GUILayout.Space(4);
+
+        if (!string.IsNullOrEmpty(_search))
+        {
+            DrawSearchResults();
+        }
+        else if (_selectedTab >= 0 && _selectedTab < _tabs.Count)
         {
             GUILayout.Label(_tabs[_selectedTab].name, GUIStylePreset.TabTitle);
             GUILayout.Box("", GUIStylePreset.Separator, GUILayout.Height(2f), GUILayout.ExpandWidth(true));

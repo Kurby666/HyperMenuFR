@@ -32,6 +32,10 @@ public class MovementTab : ITab
 
         GUILayout.Space(15);
 
+        DrawMouse();
+
+        GUILayout.Space(15);
+
         DrawTeleport();
 
         GUILayout.EndVertical();
@@ -62,10 +66,41 @@ public class MovementTab : ITab
         MalumMenu.Log.LogInfo($"Finished Drawing General Movement Tab");
     }
 
+    private void DrawMouse()
+    {
+        GUILayout.Label("Mouse", GUIStylePreset.TabSubtitle);
+
+        CheatToggles.mouseSelect = GUILayout.Toggle(CheatToggles.mouseSelect, " Mouse Select (click player, scroll = resize)");
+        if (CheatToggles.mouseSelect && MouseTools.Selected != null && MouseTools.Selected.Data != null)
+            GUILayout.Label($"Selected: {MouseTools.Selected.Data.PlayerName} (click again to clear)");
+
+        CheatToggles.selfDrag = GUILayout.Toggle(CheatToggles.selfDrag, " Drag Self (hold LMB)");
+        if (CheatToggles.selfDrag)
+        {
+            CheatToggles.selfDragSmooth = GUILayout.Toggle(CheatToggles.selfDragSmooth, "  Smooth Glide");
+            GUILayout.Label($"  Glide Speed: {CheatToggles.selfDragSpeed:F1}");
+            CheatToggles.selfDragSpeed = GUILayout.HorizontalSlider(CheatToggles.selfDragSpeed, 0.5f, 10f, GUILayout.Width(250f));
+        }
+        MalumMenu.Log.LogInfo($"Finished Drawing Mouse Controls");
+
+        GUILayout.Space(5);
+        GUILayout.Label("Movement FX", GUIStylePreset.TabSubtitle);
+
+        CheatToggles.antWalk = GUILayout.Toggle(CheatToggles.antWalk, " Ant Walk (others see you jitter)");
+        if (CheatToggles.antWalk)
+        {
+            GUILayout.Label($"  Step Time: {CheatToggles.antWalkStep:F2}s");
+            CheatToggles.antWalkStep = GUILayout.HorizontalSlider(CheatToggles.antWalkStep, 0.1f, 1.2f, GUILayout.Width(250f));
+            GUILayout.Label($"  Twitch Time: {CheatToggles.antWalkTwitch:F2}s");
+            CheatToggles.antWalkTwitch = GUILayout.HorizontalSlider(CheatToggles.antWalkTwitch, 0.03f, 0.15f, GUILayout.Width(250f));
+        }
+
+        CheatToggles.glideForOthers = GUILayout.Toggle(CheatToggles.glideForOthers, " Glide for Others (no walk anim remotely)");
+    }
+
     private void DrawTeleport()
     {
-        MalumMenu.Log.LogInfo($"Drawing Teleport Tab");
-        GUILayout.Label("Teleport", GUIStylePreset.TabSubtitle);
+        MalumMenu.Log.LogInfo($"Drawing Teleport Tab");        GUILayout.Label("Teleport", GUIStylePreset.TabSubtitle);
 
         CheatToggles.teleportCursor = GUILayout.Toggle(CheatToggles.teleportCursor, " to Cursor");
 

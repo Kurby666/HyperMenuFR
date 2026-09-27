@@ -227,6 +227,9 @@ public static class ChatController_SendFreeChat
     {
         try
         {
+            // Whisper commands (/w, /wkeep, /unwkeep) consume the message first
+            if (Cheats.ChatTools.Whisper.TryHandle(__instance)) return false;
+
             // Only works if CheatSettings.bypassUrlBlock is enabled
             if (!CheatToggles.bypassUrlBlock) return true;
 

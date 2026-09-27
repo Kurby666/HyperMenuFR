@@ -204,6 +204,16 @@ public static class PingTracker_Update
                 return;
             }
 
+            // Cheats/StatusHud.cs owns this tracker when its toggle is on: it replaces the plain
+            // author credit with the animated 32-step gradient stamp. The plain text below is
+            // untouched otherwise, so this is purely additive.
+            if (CheatToggles.gradientStamp)
+            {
+                Cheats.StatusHud.RenderTracker(__instance);
+
+                return;
+            }
+
             __instance.text.alignment = TMPro.TextAlignmentOptions.Center;
 
             int ping = Utils.GetPing();

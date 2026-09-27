@@ -33,7 +33,19 @@ public partial class MalumMenu : BasePlugin
     public static TasksUI tasksUI;
     public static ProtectUI protectUI;
     public static StreamerUI streamerUI;
+    public static Cheats.RadarPanel radarPanel;
+    public static Cheats.OverheadChat overheadChat;
+    public static Cheats.PetHand petHand;
+    public static Cheats.EventLogWindow eventLogWindow;
+    public static Cheats.MatchReplay matchReplay;
+
+    public static Cheats.LocalClones localClones;
+    public static Cheats.NetworkedClones netClones;
+    public static Cheats.StatusHud statusHud;
+    public static Cheats.RadialMenu radialMenu;
+    public static Cheats.GlichRooms glichRooms;
     public static KeybindListener keybindListener;
+    public static UpdateCheck updateCheck;
 
     public static string malumVersion = "3.3.0";
     public static string hyperVersion = "4.4.1";
@@ -254,6 +266,10 @@ public partial class MalumMenu : BasePlugin
         CheatToggles.olLogAddRemove = true;
         CheatToggles.olLogDisconnect = true;
 
+        // Votekick toolkit helpers on by default
+        CheatToggles.votekickAutoRejoin = true;
+        CheatToggles.votekickCopyCode = true;
+
         Harmony.PatchAll();
 
         // UI
@@ -263,10 +279,21 @@ public partial class MalumMenu : BasePlugin
         tasksUI = AddComponent<TasksUI>();
         protectUI = AddComponent<ProtectUI>();
         streamerUI = AddComponent<StreamerUI>();
+        radarPanel = AddComponent<Cheats.RadarPanel>();
+        overheadChat = AddComponent<Cheats.OverheadChat>();
+        petHand = AddComponent<Cheats.PetHand>();
+        eventLogWindow = AddComponent<Cheats.EventLogWindow>();
+        matchReplay = AddComponent<Cheats.MatchReplay>();
+        localClones = AddComponent<Cheats.LocalClones>();
+        netClones = AddComponent<Cheats.NetworkedClones>();
+        statusHud = AddComponent<Cheats.StatusHud>();
+        radialMenu = AddComponent<Cheats.RadialMenu>();
+        glichRooms = AddComponent<Cheats.GlichRooms>();
         // rolesUI = AddComponent<RolesUI>();
 
         // Components
         keybindListener = AddComponent<KeybindListener>();
+        updateCheck = AddComponent<UpdateCheck>();
 
         // Disables Telemetry (haven't fully tested if it works, but according to Unity docs it should)
         if (noTelemetry.Value)

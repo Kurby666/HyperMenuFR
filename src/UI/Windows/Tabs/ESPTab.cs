@@ -31,7 +31,15 @@ public class ESPTab : ITab
 
             GUILayout.Space(15);
 
+            DrawRadar();
+
+            GUILayout.Space(15);
+
             DrawMinimap();
+
+            GUILayout.Space(15);
+
+            DrawNeon();
 
             GUILayout.EndVertical();
 
@@ -47,6 +55,10 @@ public class ESPTab : ITab
         CheatToggles.seeRoles = GUILayout.Toggle(CheatToggles.seeRoles, " See Roles");
 
         CheatToggles.seeGhosts = GUILayout.Toggle(CheatToggles.seeGhosts, " See Ghosts");
+
+        CheatToggles.seeInVents = GUILayout.Toggle(CheatToggles.seeInVents, " See Players In Vents");
+
+        CheatToggles.seeVanished = GUILayout.Toggle(CheatToggles.seeVanished, " See Vanished Phantoms");
 
         CheatToggles.noShadows = GUILayout.Toggle(CheatToggles.noShadows, " No Shadows");
 
@@ -78,6 +90,13 @@ public class ESPTab : ITab
         CheatToggles.spectate = GUILayout.Toggle(CheatToggles.spectate, " Spectate");
 
         CheatToggles.freecam = GUILayout.Toggle(CheatToggles.freecam, " Freecam");
+
+        CheatToggles.worldTilt = GUILayout.Toggle(CheatToggles.worldTilt, " World Tilt (you stay upright)");
+        if (CheatToggles.worldTilt)
+        {
+            GUILayout.Label($"  Tilt Angle: {CheatToggles.worldTiltAngle:F0}°");
+            CheatToggles.worldTiltAngle = GUILayout.HorizontalSlider(CheatToggles.worldTiltAngle, -180f, 180f);
+        }
     }
 
     private void DrawTracers()
@@ -97,6 +116,33 @@ public class ESPTab : ITab
         CheatToggles.distanceBasedTracers = GUILayout.Toggle(CheatToggles.distanceBasedTracers, " Distance-based");
     }
 
+    private void DrawRadar()
+    {
+        GUILayout.Label("Radar", GUIStylePreset.TabSubtitle);
+
+        CheatToggles.showRadar = GUILayout.Toggle(CheatToggles.showRadar, " Show Radar");
+
+        if (CheatToggles.showRadar)
+        {
+            if (GUILayout.Button($"Range: {Cheats.RadarPanel.RangeName()}"))
+                Cheats.RadarPanel.CycleRange();
+
+            CheatToggles.radarCrew = GUILayout.Toggle(CheatToggles.radarCrew, " Crewmates");
+            CheatToggles.radarImps = GUILayout.Toggle(CheatToggles.radarImps, " Impostors");
+            CheatToggles.radarGhosts = GUILayout.Toggle(CheatToggles.radarGhosts, " Ghosts");
+            CheatToggles.radarBodies = GUILayout.Toggle(CheatToggles.radarBodies, " Dead Bodies (yellow)");
+
+            GUILayout.Label($" Size: {CheatToggles.radarSize:0}");
+            CheatToggles.radarSize = GUILayout.HorizontalSlider(CheatToggles.radarSize, 120f, 400f);
+            GUILayout.Label($" Opacity: {CheatToggles.radarOpacity:F2}");
+            CheatToggles.radarOpacity = GUILayout.HorizontalSlider(CheatToggles.radarOpacity, 0.1f, 1f);
+            GUILayout.Label($" X: {CheatToggles.radarX:0}");
+            CheatToggles.radarX = GUILayout.HorizontalSlider(CheatToggles.radarX, 0f, 1800f);
+            GUILayout.Label($" Y: {CheatToggles.radarY:0}");
+            CheatToggles.radarY = GUILayout.HorizontalSlider(CheatToggles.radarY, 0f, 1000f);
+        }
+    }
+
     private void DrawMinimap()
     {
         GUILayout.Label("Minimap", GUIStylePreset.TabSubtitle);
@@ -108,5 +154,18 @@ public class ESPTab : ITab
         CheatToggles.mapGhosts = GUILayout.Toggle(CheatToggles.mapGhosts, " Ghosts");
 
         CheatToggles.colorBasedMap = GUILayout.Toggle(CheatToggles.colorBasedMap, " Color-based");
+    }
+
+    private void DrawNeon()
+    {
+        GUILayout.Label("Neon Outline", GUIStylePreset.TabSubtitle);
+
+        CheatToggles.neonOutline = GUILayout.Toggle(CheatToggles.neonOutline, " Neon Outline");
+
+        if (CheatToggles.neonOutline)
+        {
+            if (GUILayout.Button($"Mode: {NeonOutline.ModeName()}"))
+                NeonOutline.CycleMode();
+        }
     }
 }
