@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace MalumMenu.Cheats
 {
-	// Ported from othermenu/Patches/AutoHostPatches.cs (NocturneAutoHost + NocturneAutoHostService).
+	// Ported from othermenu/Patches/AutoHostPatches.cs (HyperAutoHost + HyperAutoHostService).
 	// Host-only lobby auto-start state machine: warmup, load wait, player minimum, countdown,
 	// fast start, force start (lobby lifetime / N minutes), backoff after failed starts,
 	// and an optional instant start. Driven from RoutineManager.Update.

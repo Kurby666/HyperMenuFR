@@ -6,7 +6,7 @@ namespace MalumMenu.Cheats
 {
 	// Persistent sabotage pressure: re-fire main sabotage, keep lights off,
 	// infinite mushroom on Fungle, and multi-sabotage for non-host impostors.
-	// Ported from othermenu Cheats/NocturneSabotage.cs + Patches/NocturneMultiSabotagePatch.cs.
+	// Ported from othermenu Cheats/HyperSabotage.cs + Patches/HyperMultiSabotagePatch.cs.
 	internal static class SabotageSpam
 	{
 		private const int HandlingId = 20030;

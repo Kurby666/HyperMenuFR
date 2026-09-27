@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats
 {
-	// Ported from othermenu/Menu/NocturneSearchIndex.cs (the feature-title index) and the
-	// column/opacity handling from othermenu/Menu/NocturneMenu.cs + NocturneStyle.cs.
+	// Ported from othermenu/Menu/HyperSearchIndex.cs (the feature-title index) and the
+	// column/opacity handling from othermenu/Menu/HyperMenu.cs + HyperStyle.cs.
 	//
 	// INDEX SOURCE DIFFERENCE, and it is deliberate: othermenu calls
-	// `NocturneSearchIndex.Note(tab, group, title)` from inside its `Card(...)` layout helper, so the
+	// `HyperSearchIndex.Note(tab, group, title)` from inside its `Card(...)` layout helper, so the
 	// index fills itself as cards are drawn. HyperMenu's 19 tab bodies each build their own
 	// GUILayout layout inline across ~15 separate files, so there is no single choke point to hook.
 	// Instead the index is derived automatically from `CheatToggles.ToggleFields` — the same
@@ -289,7 +289,7 @@ namespace MalumMenu.Cheats
 	// description is "disables lobby and main menu repaint, art and custom Start button" — all
 	// of which are othermenu-specific effects HyperMenu never had (the dark lobby theme, main-menu
 	// picture and custom start button were all declined), so the switch would control nothing.
-	// LiteMenu strips NocturneStyle's rounded-rect/glow drawing, and HyperMenu draws with plain
+	// LiteMenu strips HyperStyle's rounded-rect/glow drawing, and HyperMenu draws with plain
 	// GUILayout, so there are no custom effects to strip either.
 	internal static class MenuTheme
 	{

@@ -37,7 +37,7 @@ public class KeybindListener : MonoBehaviour
                 field.SetValue(null, !current);
             }
 
-            // Action hotkeys (Menu/NocturneQuick equivalents) share this update so they inherit
+            // Action hotkeys (Menu/HyperQuick equivalents) share this update so they inherit
             // the same panic + chat-open guards the cheat keybinds already had.
             Cheats.Hotkeys.Tick();
         }

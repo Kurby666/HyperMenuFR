@@ -7,7 +7,7 @@ namespace MalumMenu.Cheats
 {
 	// Missing role buffs: kill aura, morph-into-dead, endless phantom invis,
 	// judge overrule without tasks, detective no cooldown.
-	// Ported from othermenu Cheats/NocturneRoleBuffs.cs (BuffShiftPatch subset).
+	// Ported from othermenu Cheats/HyperRoleBuffs.cs (BuffShiftPatch subset).
 	internal static class RoleBuffs
 	{
 		private const int HandlingId = 20036;

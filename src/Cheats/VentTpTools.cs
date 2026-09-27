@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MalumMenu;
 
-// Port of othermenu's NocturneVentTp + NocturneImpTrap: mark players and send
+// Port of othermenu's HyperVentTp + HyperImpTrap: mark players and send
 // them to a selected vent, auto-scatter them on a timer, restrict who may
 // vent (host), and rally everyone onto the impostor's vent on kill/shift/vanish.
 public static class VentTpTools

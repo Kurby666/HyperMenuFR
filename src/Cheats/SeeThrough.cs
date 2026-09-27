@@ -5,7 +5,7 @@ using HarmonyLib;
 namespace MalumMenu.Cheats
 {
 	// See-through: see players hiding in vents + see vanished phantoms.
-	// Ported from othermenu Cheats/NocturneSeeThrough.cs (vents + phantoms parts;
+	// Ported from othermenu Cheats/HyperSeeThrough.cs (vents + phantoms parts;
 	// see-ghosts and see-shield already exist in src).
 	internal static class SeeThrough
 	{

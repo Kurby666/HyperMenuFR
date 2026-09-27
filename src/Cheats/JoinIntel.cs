@@ -28,8 +28,8 @@ namespace MalumMenu.Cheats
 		internal string Puid;
 	}
 
-	// Ported from othermenu/Security/NocturneJoinDetector.cs + NocturneRecent.cs +
-	// NocturneRecentPlayers.cs.
+	// Ported from othermenu/Security/HyperJoinDetector.cs + HyperRecent.cs +
+	// HyperRecentPlayers.cs.
 	//
 	// src substitutions: the detector's MonoBehaviour is dropped in favour of a static Tick driven
 	// from RoutineManager.Update (src convention, the same call othermenu's per-frame Update made);

@@ -12,8 +12,8 @@ namespace MalumMenu.Cheats
 {
 	// Chat toolbox: sender + spam + flood, quick-chat chains, host slash-commands,
 	// /c color commands, whispers, per-player mute. Ported from othermenu
-	// Chat/NocturneChatSender.cs, NocturneQuickChatChain.cs, NocturneCommands.cs,
-	// NocturneColorCmd.cs, NocturneWhisper.cs, NocturneMuteList.cs and
+	// Chat/HyperChatSender.cs, HyperQuickChatChain.cs, HyperCommands.cs,
+	// HyperColorCmd.cs, HyperWhisper.cs, HyperMuteList.cs and
 	// Patches/ChatMutePatch.cs. Adaptations: English-only strings (no RU/EN toggle
 	// in src), local-only /help (no broadcast), role parsing from English names.
 	internal static class ChatTools

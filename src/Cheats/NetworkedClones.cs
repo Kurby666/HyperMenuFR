@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace MalumMenu.Cheats;
 
-// othermenu/Lobby/NocturneTwins.cs — host-only networked clones everyone sees.
+// othermenu/Lobby/HyperTwins.cs — host-only networked clones everyone sees.
 // Queued spawns of frozen PlayerControl twins (owner -2), click to spawn/remove,
 // formations + text-from-clones via LocalClones.FormationPos + CloneFont.
 public sealed class NetworkedClones : MonoBehaviour

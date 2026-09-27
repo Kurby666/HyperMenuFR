@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MalumMenu;
 
-// Port of othermenu NocturneMouseTools.cs (mouse select + wheel resize + self-drag).
+// Port of othermenu HyperMouseTools.cs (mouse select + wheel resize + self-drag).
 // RMB teleport is NOT duplicated here — src already has it (MalumCheats.TeleportCursorCheat).
 internal static class MouseTools
 {

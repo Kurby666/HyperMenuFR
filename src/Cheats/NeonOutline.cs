@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MalumMenu;
 
 // Neon outline: client-side glow outline on every player, Rainbow / By-Role / By-Color.
-// Port of othermenu Cheats/NocturneNeonOutline.cs. othermenu pokes the body
+// Port of othermenu Cheats/HyperNeonOutline.cs. othermenu pokes the body
 // material's _Outline shader props; those renderer paths don't exist in this
 // codebase, so this uses the verified CosmeticsLayer.SetOutline machinery
 // (same calls as MouseTools.Outlined). Skips MouseTools.Selected so the blue

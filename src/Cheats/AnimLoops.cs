@@ -12,7 +12,7 @@ namespace MalumMenu.Cheats
 	}
 
 	// Animation loops + one-shot effects (local-only fun).
-	// Ported from othermenu Cheats/NocturneAnimations.cs.
+	// Ported from othermenu Cheats/HyperAnimations.cs.
 	internal static class AnimLoops
 	{
 		private const int HandlingId = 20026;

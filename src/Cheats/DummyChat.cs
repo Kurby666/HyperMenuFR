@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MalumMenu.Cheats
 {
 	// Dummy senses, body reports, meeting chatter and voting. Ported from
-	// othermenu Host/NocturneDummyChat.cs. Adaptations: MeetingHud.CastVote
+	// othermenu Host/HyperDummyChat.cs. Adaptations: MeetingHud.CastVote
 	// does not exist in src's game refs and VoteBanSystem.AddVote takes lobby
 	// client ids (swallowed by the host instant-kick prefix), so dummy votes
 	// use the src-native meeting path (playerStates[].SetVote + SetDirtyBit +

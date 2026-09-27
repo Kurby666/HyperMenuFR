@@ -8,9 +8,9 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats
 {
-	// Ported from othermenu/Menu/NocturneHud.cs.
+	// Ported from othermenu/Menu/HyperHud.cs.
 	//
-	// SCOPE: display + hotkey dispatch only. othermenu's NocturneHud.Update is its master tick
+	// SCOPE: display + hotkey dispatch only. othermenu's HyperHud.Update is its master tick
 	// dispatcher (Invisible, LobbyPhantom, Corpses, VentTp, Shield, VentKick, Jail, ColorAll,
 	// Platform, TaskDrain, Pet, MeetingTools, VoteSpam, SmokeSpam, LobbyHistory, Dleks + ~40 key
 	// actions). In src every one of those ticks is already wired elsewhere (ShipStatus_FixedUpdate,
@@ -83,7 +83,7 @@ namespace MalumMenu.Cheats
 			return c32.r.ToString("X2") + c32.g.ToString("X2") + c32.b.ToString("X2");
 		}
 
-		// src's live accent source. othermenu reads NocturneStyle.Current.Accent; HyperMenu keeps its
+		// src's live accent source. othermenu reads HyperStyle.Current.Accent; HyperMenu keeps its
 		// hue in MenuUI.hue (the same value the RGB mode cycles), so the gradient is rebuilt
 		// whenever that hue moves.
 		private static void Gradient()

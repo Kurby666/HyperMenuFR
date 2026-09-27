@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats
 {
-	// Ported from othermenu/Core/NocturneKeys.cs plus the whole action dispatcher that othermenu
-	// keeps inside NocturneHud.Update (Menu/NocturneHud.cs lines 32-240).
+	// Ported from othermenu/Core/HyperKeys.cs plus the whole action dispatcher that othermenu
+	// keeps inside HyperHud.Update (Menu/HyperHud.cs lines 32-240).
 	//
 	// This is a SECOND, independent binding layer. src's existing KeybindListener
 	// (Components/KeybindListener.cs) binds a single KeyCode per CheatToggles bool and toggles it

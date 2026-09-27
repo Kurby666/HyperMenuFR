@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats;
 
-// othermenu/Lobby/NocturneCloneFont.cs — 5x7 glyph font for text-from-clones builders.
+// othermenu/Lobby/HyperCloneFont.cs — 5x7 glyph font for text-from-clones builders.
 internal static class CloneFont
 {
     private const int W = 5;

@@ -14,7 +14,7 @@ using Object = UnityEngine.Object;
 
 namespace MalumMenu.Cheats
 {
-	// Ported from othermenu/Extras/NocturneGlichRooms.cs.
+	// Ported from othermenu/Extras/HyperGlichRooms.cs.
 	//
 	// What it does: hosts a throwaway lobby, immediately starts it, waits for the results screen,
 	// reads the OTHER players' lowest level out of the post-game data, then leaves. A "bug room"
@@ -26,11 +26,11 @@ namespace MalumMenu.Cheats
 	//   * othermenu reads its options from string/float ConfigEntries; here they are CheatToggles
 	//     (glichCycle / glichHunt / glichLog / glichDelay) plus one real ConfigEntry<string> for
 	//     the code-ending target list, because src has no string config entries of its own.
-	//   * NocturneText.T(ru, en) -> English literals (src is English-only by convention).
-	//   * NocturneToast.Push -> MalumMenu.notifications.Send(title, message, ttl).
-	//   * NocturnePlugin.Logger.LogInfo -> ConsoleUI.Log, which is src's log sink and which the new
+	//   * HyperText.T(ru, en) -> English literals (src is English-only by convention).
+	//   * HyperToast.Push -> MalumMenu.notifications.Send(title, message, ttl).
+	//   * HyperPlugin.Logger.LogInfo -> ConsoleUI.Log, which is src's log sink and which the new
 	//     Event Log window's LOG tab already reads.
-	//   * The stored file moved from <root>/Nocturne/GlichRooms.txt to <root>/HyperMenu/GlichRooms.txt
+	//   * The stored file moved from <root>/Hyper/GlichRooms.txt to <root>/HyperMenu/GlichRooms.txt
 	//     to match every other HyperMenu data file; MoveOldFile still picks up the old one.
 	//   * DROPPED: othermenu's Wild() one-shot dump of every PassiveButton in the scene and the
 	//     Russian "кнопка:" / "СБОРКА-4 кнопок" chatter around it. That is debug scaffolding for a
@@ -71,7 +71,7 @@ namespace MalumMenu.Cheats
 
 		private static string Dir => Path.Combine(BepInEx.Paths.GameRootPath, "HyperMenu");
 		private static string Txt => Path.Combine(Dir, "GlichRooms.txt");
-		private static string OldTxt => Path.Combine(BepInEx.Paths.GameRootPath, "Nocturne", "GlichRooms.txt");
+		private static string OldTxt => Path.Combine(BepInEx.Paths.GameRootPath, "Hyper", "GlichRooms.txt");
 
 		internal static string TargetList => Targets?.Value ?? string.Empty;
 

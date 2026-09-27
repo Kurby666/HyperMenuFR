@@ -9,12 +9,12 @@ using UnityEngine;
 namespace MalumMenu.Cheats
 {
 	// Nick history by FriendCode + known-player notify. Ported from othermenu
-	// Player/NocturneNameHistory.cs (431 lines). Adaptations: tracked from
+	// Player/HyperNameHistory.cs (431 lines). Adaptations: tracked from
 	// PlayerControl.AllPlayerControls (level via Data.PlayerLevel like PlayersTab,
 	// PUID/platform via allClients FriendCode match) instead of ClientData polling;
 	// level/platform/PUID stored in the same block file format for forward
 	// compatibility; greet/nick-change toasts via MalumMenu.notifications instead of
-	// NocturneToast/event-log (neither exists in src); Tick driven from
+	// HyperToast/event-log (neither exists in src); Tick driven from
 	// RoutineManager.Update instead of a MonoBehaviour; English-only strings.
 	internal static class NameHistory
 	{

@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats
 {
-	// Ported from othermenu/Menu/NocturneQuick.cs (the 48-item quick palette) and
-	// othermenu/Menu/NocturneRadial.cs (the hold-to-open ring).
+	// Ported from othermenu/Menu/HyperQuick.cs (the 48-item quick palette) and
+	// othermenu/Menu/HyperRadial.cs (the hold-to-open ring).
 	//
 	// othermenu gives every quick item its own ConfigEntry<bool>. HyperMenu has no such thing —
 	// every cheat toggle is a plain `public static bool` on CheatToggles, already reachable by name

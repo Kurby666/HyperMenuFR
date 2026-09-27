@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats
 {
-	// Port of othermenu Mirage/LagComp (NocturneLagComp.cs): manipulate the
+	// Port of othermenu Mirage/LagComp (HyperLagComp.cs): manipulate the
 	// position others see while you move normally locally.
 	// Freeze frame = never send movement updates (appear stationary to others).
 	// Flicker = send position in bursts separated by random frame gaps.

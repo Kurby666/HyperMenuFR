@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MalumMenu.Cheats
 {
 	// Waypoint movement, task wandering, sabotage repair for dummies. Ported
-	// from othermenu Host/NocturneDummyAI.cs. Adaptations: FastRooms does not
+	// from othermenu Host/HyperDummyAI.cs. Adaptations: FastRooms does not
 	// exist in src's game refs so Room() iterates AllRooms matching RoomId;
 	// system casts use src's .Cast<> convention; behavior gates read
 	// CheatToggles.dummyDoTasks / dummyFixSabotage; errors via ErrorReporter.

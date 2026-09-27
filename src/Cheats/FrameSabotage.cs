@@ -6,7 +6,7 @@ namespace MalumMenu.Cheats
 {
 	// Frame sabotage: fakes the actor in a system RPC so a foreign guard
 	// flags an innocent player (Sabotage flags a non-impostor at any value).
-	// Ported from othermenu Cheats/NocturneFrameSabotage.cs.
+	// Ported from othermenu Cheats/HyperFrameSabotage.cs.
 	internal static class FrameSabotage
 	{
 		private const int HandlingId = 20031;

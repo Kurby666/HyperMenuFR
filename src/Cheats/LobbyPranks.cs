@@ -10,11 +10,11 @@ namespace MalumMenu.Cheats
 {
 	// Host-only lobby/match pranks: turn everyone into eggs, rainbow colors,
 	// cosmetic cycles, plus host-view-only size / spin / float / jelly gags and
-	// a repeat-murder loop. Ported from othermenu Lobby/NocturneLobbyPranks.cs
+	// a repeat-murder loop. Ported from othermenu Lobby/HyperLobbyPranks.cs
 	// (703 lines) as a static class driven by src ticks instead of a MonoBehaviour
 	// (Tick from ShipStatus_FixedUpdate, LateTick from PlayerPhysics_LateUpdate).
 	// Adaptations: English-only feedback strings returned to the caller for
-	// toasts; NocturneForceRoles.Assign replaced by Network.BatchedMessage
+	// toasts; HyperForceRoles.Assign replaced by Network.BatchedMessage
 	// QueueSetRole (src host-broadcast / GameDataTo-host routing); cosmetics sent
 	// through QueueSetColor/QueueSetHatStr/... with the sequence-id pattern from
 	// OutfitTools; role grants only when an anticheat is present, as upstream.

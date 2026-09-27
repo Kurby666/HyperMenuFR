@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats
 {
-	// Ported from othermenu/Menu/NocturneReplay.cs.
+	// Ported from othermenu/Menu/HyperReplay.cs.
 	//
 	// othermenu drives this from a MonoBehaviour Update for path sampling plus a DrawGui for the
 	// window. Here the sampling Tick comes from PlayerPhysics_LateUpdate (src's per-frame hook that
@@ -479,7 +479,7 @@ namespace MalumMenu.Cheats
 		}
 	}
 
-	// The eight event patchers, all also feeding the replay, ported from NocturneEventNotify.
+	// The eight event patchers, all also feeding the replay, ported from HyperEventNotify.
 	internal static class ReplayRecorder
 	{
 		internal const int HandlingId = 20074;

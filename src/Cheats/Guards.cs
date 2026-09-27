@@ -13,7 +13,7 @@ namespace MalumMenu.Cheats
 {
 	// Ported from othermenu/Security/ForeignMods.cs. Detection only ever READS other clients'
 	// incoming RPCs; it never sends anything. The user explicitly skipped othermenu's
-	// "see other Nocturne users" handshake, so the toast is gated on its own toggle
+	// "see other Hyper users" handshake, so the toast is gated on its own toggle
 	// (CheatToggles.modDetectToast) rather than on the handshake config.
 	internal static class ForeignMods
 	{
@@ -356,7 +356,7 @@ namespace MalumMenu.Cheats
 		}
 	}
 
-	// Ported from othermenu/Patches/NocturneAntiBan.cs: a client that boots a fake vent (op 2 with
+	// Ported from othermenu/Patches/HyperAntiBan.cs: a client that boots a fake vent (op 2 with
 	// 0 bytes and vent 0) and is then ejected within a second is running the vent-kick ban exploit.
 	internal static class AntiBan
 	{
@@ -412,7 +412,7 @@ namespace MalumMenu.Cheats
 		}
 	}
 
-	// Ported from othermenu/Patches/NocturneVentTpProtect.cs + NocturneZiplineProtect.cs.
+	// Ported from othermenu/Patches/HyperVentTpProtect.cs + HyperZiplineProtect.cs.
 	// Blocks someone force-moving the local player: a raw vent boot, a forced ventilation update,
 	// or a zipline ride the local player never asked for.
 	//
@@ -463,7 +463,7 @@ namespace MalumMenu.Cheats
 		}
 	}
 
-	// Ported from othermenu/Security/NocturneAntiFakeMeeting.cs + NocturneSpawnFlood.cs.
+	// Ported from othermenu/Security/HyperAntiFakeMeeting.cs + HyperSpawnFlood.cs.
 	internal static class FloodGuard
 	{
 		internal const int HandlingId = 20079;

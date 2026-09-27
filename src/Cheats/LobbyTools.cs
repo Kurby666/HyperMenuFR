@@ -17,7 +17,7 @@ namespace MalumMenu.Cheats
 {
 	// Lobby toys: destroy/create lobby, confirm-gated leave, fake map in lobby,
 	// auto-return after match, lobby history with rejoin. Ported from othermenu
-	// Lobby/NocturneLobbyTools.cs, NocturneFakeMap.cs, NocturneAutoLobbyReturn.cs
+	// Lobby/HyperLobbyTools.cs, HyperFakeMap.cs, HyperAutoLobbyReturn.cs
 	// and LobbyHistory.cs. Adaptations: destroy/create reuse src's existing
 	// Despawn/Spawn Lobby logic as host-guarded feedback-string helpers;
 	// FakeMap spawns via src's InstantiateAsync pattern (HostOnlyTab2.SpawnMap)

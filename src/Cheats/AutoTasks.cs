@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MalumMenu.Cheats
 {
 	// Auto-tasks: finish own tasks one by one in the background.
-	// Ported from othermenu Cheats/NocturneAutoTasks.cs.
+	// Ported from othermenu Cheats/HyperAutoTasks.cs.
 	internal static class AutoTasks
 	{
 		private const int HandlingId = 20034;

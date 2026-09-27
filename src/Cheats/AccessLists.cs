@@ -9,17 +9,17 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats
 {
-	// Ported from othermenu/Security/NocturneAccess.cs + othermenu/Patches/JoinLevelPatches.cs
-	// (NocturneJoinLevels) + the two enforcement hooks in othermenu/Patches/AccessGuardPatches.cs
-	// (OnPlayerJoined postfix and the NocturneAccessGuard Update loop).
+	// Ported from othermenu/Security/HyperAccess.cs + othermenu/Patches/JoinLevelPatches.cs
+	// (HyperJoinLevels) + the two enforcement hooks in othermenu/Patches/AccessGuardPatches.cs
+	// (OnPlayerJoined postfix and the HyperAccessGuard Update loop).
 	//
 	// Deliberately NOT ported from AccessGuardPatches.cs:
-	//   * NocturneVoteKickPatch  -> already covered by Cheats/VotekickGuard.cs (host punish-voter
+	//   * HyperVoteKickPatch  -> already covered by Cheats/VotekickGuard.cs (host punish-voter
 	//     prefix on VoteBanSystem.AddVote with Null/Warn/Kick/Ban).
-	//   * NocturneKickSelfGuardPatch -> already covered by the self-kick block in VotekickGuard.
+	//   * HyperKickSelfGuardPatch -> already covered by the self-kick block in VotekickGuard.
 	// Porting either again would put two prefixes on the same method.
 	//
-	// Deliberately NOT ported: othermenu/Security/NocturneGate.cs. Despite the name it is not a
+	// Deliberately NOT ported: othermenu/Security/HyperGate.cs. Despite the name it is not a
 	// join gate at all - it hashes the local PUID and hard-disables the mod when the hash is on a
 	// hardcoded blocklist. That is the othermenu author's piracy/licensing check, not a menu
 	// feature, so it has no place in HyperMenu.
@@ -734,7 +734,7 @@ namespace MalumMenu.Cheats
 
 		// ---------------------------------------------------------------- periodic enforcement
 
-		// Port of NocturneAccessGuard.Update. Colour reservations are NOT re-applied from here:
+		// Port of HyperAccessGuard.Update. Colour reservations are NOT re-applied from here:
 		// Cheats/ColorTools.cs ReservationTick already runs a 1s idempotent host poll that applies
 		// them on join, so calling both would just do the same work twice.
 		internal static void Tick()
@@ -807,7 +807,7 @@ namespace MalumMenu.Cheats
 		}
 	}
 
-	// Ported verbatim from othermenu/Patches/JoinLevelPatches.cs (NocturneJoinLevels).
+	// Ported verbatim from othermenu/Patches/JoinLevelPatches.cs (HyperJoinLevels).
 	// A joining client sends its level before its character exists, so the raw value is cached
 	// off both the player id and the InnerNet client id; every later read prefers the live value
 	// and falls back to the cache.

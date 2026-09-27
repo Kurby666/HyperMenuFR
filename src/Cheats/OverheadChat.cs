@@ -7,7 +7,7 @@ using UnityEngine;
 namespace MalumMenu.Cheats
 {
 	// Overhead chat: show chat messages as speech bubbles above players.
-	// Ported from othermenu Cheats/NocturneOverheadChat.cs.
+	// Ported from othermenu Cheats/HyperOverheadChat.cs.
 	public class OverheadChat : MonoBehaviour
 	{
 		private const int HandlingId = 20041;

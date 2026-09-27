@@ -320,7 +320,7 @@ Utilities/
  bepinex.unity.common/6.0.0-be.735/lib/netstandard2.0/BepInEx.Unity.Common.dll
  bepinex.unity.il2cpp/6.0.0-be.735/lib/net6.0/BepInEx.Unity.IL2CPP.dll
  disarm/2022.1.0-master.57/lib/net6.0/Disarm.dll
- harmonyx/2.10.2/lib/netstandard2.0/0Harmony.dll
+ harmHyper/2.10.2/lib/netstandard2.0/0Harmony.dll
  iced/1.21.0/lib/netstandard2.1/Iced.dll
  il2cppinterop.common/1.4.6-ci.426/lib/netstandard2.0/Il2CppInterop.Common.dll
  il2cppinterop.generator/1.4.6-ci.426/lib/netstandard2.1/Il2CppInterop.Generator.dll

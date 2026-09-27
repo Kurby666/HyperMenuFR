@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats
 {
-    // Ports othermenu Player/NocturneColorSnipe.cs (lobby color snipe),
-    // Player/NocturneColorAll.cs (host force-one-color),
-    // Player/NocturneColorReservations.cs (host FriendCode -> color file),
-    // Player/NocturneNameColor.cs (local animated colored name).
+    // Ports othermenu Player/HyperColorSnipe.cs (lobby color snipe),
+    // Player/HyperColorAll.cs (host force-one-color),
+    // Player/HyperColorReservations.cs (host FriendCode -> color file),
+    // Player/HyperNameColor.cs (local animated colored name).
     public static class ColorTools
     {
         private const int HandlingId = 20049;

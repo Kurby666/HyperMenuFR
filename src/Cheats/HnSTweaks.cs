@@ -7,7 +7,7 @@ using UnityEngine;
 namespace MalumMenu.Cheats;
 
 // Ported from othermenu/Patches/HnSPatches.cs (HnSSeekers) and the FourImpostors branch of
-// othermenu/Patches/NocturneHostOptions.cs
+// othermenu/Patches/HyperHostOptions.cs
 // Host-only: custom seeker count in Hide and Seek, no seeker head start, and 4 impostors in normal play.
 internal static class HnSTweaks
 {

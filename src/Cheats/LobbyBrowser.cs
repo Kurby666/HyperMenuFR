@@ -19,7 +19,7 @@ namespace MalumMenu.Cheats
 	{
 		internal const int HandlingId = 20069;
 
-		private const string ExtendedLobbyScrollerName = "NocturneExtendedLobbyScroller";
+		private const string ExtendedLobbyScrollerName = "HyperExtendedLobbyScroller";
 		private const int ExtendedLobbyRowTarget = 24;
 
 		// Host-name filter. src has no string-valued config entries, so this follows the

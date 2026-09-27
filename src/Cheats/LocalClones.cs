@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace MalumMenu.Cheats;
 
-// othermenu/Lobby/NocturneLobbyClones.cs — local-only lobby clones:
+// othermenu/Lobby/HyperLobbyClones.cs — local-only lobby clones:
 // LMB spawns at cursor, RMB removes, drag to move, guard orbit / wander,
 // shadow clone, 31 formations, self-portrait, text-from-clones.
 public sealed class LocalClones : MonoBehaviour

@@ -5,7 +5,7 @@ namespace MalumMenu.Cheats
 {
 	// Bypass comms sabotage: tasks and role abilities keep working locally
 	// while communications are sabotaged.
-	// Ported from othermenu Cheats/NocturneComms.cs.
+	// Ported from othermenu Cheats/HyperComms.cs.
 	internal static class CommsBypass
 	{
 		private const int HandlingId = 20032;

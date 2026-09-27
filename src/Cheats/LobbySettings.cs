@@ -10,7 +10,7 @@ namespace MalumMenu.Cheats
 {
 	// Live lobby-options editor (host, lobby only): reads/writes the current
 	// IGameOptions in place and re-syncs to the lobby. Ported from othermenu
-	// Host/NocturneLobbySettings.cs (En-only; Tick driven from
+	// Host/HyperLobbySettings.cs (En-only; Tick driven from
 	// RoutineManager.Update instead of a MonoBehaviour Update; the SyncPass
 	// guard wrapper has no src equivalent so SyncOptions runs plain).
 	internal static class LobbySettings

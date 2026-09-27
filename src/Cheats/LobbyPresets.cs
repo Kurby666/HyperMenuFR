@@ -7,7 +7,7 @@ namespace MalumMenu.Cheats
 {
 	// Named lobby-settings presets (host, lobby only), stored as name|payload
 	// lines in HyperMenu/LobbyPresets.txt. Ported from othermenu
-	// Host/NocturneLobbyPresets.cs (BepInEx-config storage replaced with the
+	// Host/HyperLobbyPresets.cs (BepInEx-config storage replaced with the
 	// same flat-file pattern as NameHistory/ColorReservations).
 	internal static class LobbyPresets
 	{

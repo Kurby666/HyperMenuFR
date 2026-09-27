@@ -173,9 +173,9 @@ namespace MalumMenu.Cheats
 	}
 
 	// ==========================================================================================
-	// ChatModerationPatches.cs (NocturneBanWords half) — local word censor.
+	// ChatModerationPatches.cs (HyperBanWords half) — local word censor.
 	//
-	// The other half of that file is NocturneChatLog, which appends every chat line to a per-lobby
+	// The other half of that file is HyperChatLog, which appends every chat line to a per-lobby
 	// text file. src already covers that need better: the Config tab's "Log chat messages to
 	// console" toggle routes through ConsoleUI.Log, which keeps an in-memory ring AND a file, and
 	// the new Event Log window reads the in-memory side. So only the censor is ported.
@@ -308,7 +308,7 @@ namespace MalumMenu.Cheats
 	}
 
 	// ==========================================================================================
-	// Extras/NocturneXmas.cs + Patches/XmasChatPatches.cs — the "/xmas" colour-cycling troll.
+	// Extras/HyperXmas.cs + Patches/XmasChatPatches.cs — the "/xmas" colour-cycling troll.
 	// ==========================================================================================
 	internal static class Xmas
 	{
@@ -547,7 +547,7 @@ namespace MalumMenu.Cheats
 	// othermenu's theme + window shell). "Unlimited length" is also not here: src already has it
 	// via Patches/TextBoxTMPPatches.cs behind the Chat tab's "Allow Longer Messages" toggle.
 	//
-	// ChatThemeStyler in othermenu mixes two colours with NocturneStyle.Current (othermenu's own
+	// ChatThemeStyler in othermenu mixes two colours with HyperStyle.Current (othermenu's own
 	// theme palette). src has no such object, so a fixed dark palette is used instead and the
 	// bubble-cache text colour is taken from the existing chat colour.
 	// ==========================================================================================

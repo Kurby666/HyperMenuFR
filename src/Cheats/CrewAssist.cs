@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MalumMenu.Cheats
 {
 	// Crew-side helpers: use consoles from afar, skip decon waits, pick Airship spawn.
-	// Ported from othermenu Cheats/NocturneAssist.cs.
+	// Ported from othermenu Cheats/HyperAssist.cs.
 	internal static class CrewAssist
 	{
 		private const int HandlingId = 20035;

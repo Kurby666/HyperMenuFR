@@ -8,7 +8,7 @@ namespace MalumMenu.Cheats
 {
 	// Votekick guard: defensive auto-rejoin escape (non-host), vote tally expose,
 	// host punish-voter (Null/Warn/Kick/Ban), and self-kick block.
-	// Ported from othermenu NocturneAntiVotekick.cs + NocturneVoteKickPatch (AccessGuardPatches.cs).
+	// Ported from othermenu HyperAntiVotekick.cs + HyperVoteKickPatch (AccessGuardPatches.cs).
 	internal static class VotekickGuard
 	{
 		private const int HandlingId = 20050;

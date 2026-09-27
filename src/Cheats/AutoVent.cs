@@ -6,7 +6,7 @@ namespace MalumMenu.Cheats
 {
 	// Auto-vent after kill + body-to-vent (host): teleport the victim into the
 	// nearest vent before the kill lands so no body is left behind.
-	// Ported from othermenu Cheats/NocturneAutoVent.cs.
+	// Ported from othermenu Cheats/HyperAutoVent.cs.
 	internal static class AutoVent
 	{
 		private const int HandlingId = 20039;

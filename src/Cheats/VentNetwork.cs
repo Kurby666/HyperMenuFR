@@ -8,7 +8,7 @@ namespace MalumMenu.Cheats
 {
 	// Vent network: rewire vent exits into one map-spanning chain so you can
 	// travel anywhere through vents. Toggle off restores original wiring.
-	// Ported from othermenu Patches/NocturneVentNetwork.cs.
+	// Ported from othermenu Patches/HyperVentNetwork.cs.
 	internal static class VentNetwork
 	{
 		private const int HandlingId = 20038;

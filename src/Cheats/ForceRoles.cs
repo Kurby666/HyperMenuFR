@@ -7,7 +7,7 @@ namespace MalumMenu.Cheats
 {
 	// Per-player forced roles (host): stored picks are applied live via RpcSetRole
 	// and re-applied at game start by replacing the role draft. Ported from
-	// othermenu Host/NocturneForceRoles.cs (En-only; Utils.Host replaced with a
+	// othermenu Host/HyperForceRoles.cs (En-only; Utils.Host replaced with a
 	// local host check).
 	internal static class ForceRoles
 	{

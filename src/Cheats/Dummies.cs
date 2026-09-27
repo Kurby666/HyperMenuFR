@@ -9,7 +9,7 @@ using UnityEngine;
 namespace MalumMenu.Cheats
 {
 	// Host-spawned bot players that wander, do tasks, fix sabotages, report
-	// bodies, chat and vote. Ported from othermenu Host/NocturneDummies.cs.
+	// bodies, chat and vote. Ported from othermenu Host/HyperDummies.cs.
 	// Adaptations: static class + Tick() from RoutineManager (src has no
 	// hotkey system — spawn via UI button); ForceRoles has no RegisterDefault
 	// so crewmate-default is replicated with Assign + Set(pid, 1) + pending

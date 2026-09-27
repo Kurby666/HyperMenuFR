@@ -9,12 +9,12 @@ using UnityEngine;
 namespace MalumMenu.Cheats
 {
 	// Morph anyone into anyone (host, in match). Ported from othermenu
-	// Player/NocturneMorph.cs (140 lines): victims are granted Shapeshifter for the
+	// Player/HyperMorph.cs (140 lines): victims are granted Shapeshifter for the
 	// duration, shifted into the target's appearance, then restored to their
 	// original role. Adaptations: revert list is tracked locally (_morphed) because
 	// PlayerControl.shapeshiftTargetPlayerId has no reference in src and would not
 	// compile; role set via host RpcSetRole(role, true) (PlayersTab pattern) instead
-	// of NocturneForceRoles; coroutine runs through ErrorReporter.GuardCoroutine
+	// of HyperForceRoles; coroutine runs through ErrorReporter.GuardCoroutine
 	// (HostOnlyTab pattern); English-only feedback.
 	internal static class MorphTools
 	{

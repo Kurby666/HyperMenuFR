@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace MalumMenu.Cheats
 {
-	// Ported from othermenu/Menu/NocturneEventLog.cs + othermenu/Security/NocturneEventNotify.cs.
+	// Ported from othermenu/Menu/HyperEventLog.cs + othermenu/Security/HyperEventNotify.cs.
 	//
 	// src substitution: othermenu keeps a single flat list that both the event window and the
 	// toast reporter write to. Here EventLog is that list, and the window is a MonoBehaviour added
 	// next to RadarPanel/OverheadChat so it draws with the menu closed. The window's second tab
-	// ("LOG") reads ConsoleUI.GetRecentEntries instead of othermenu re-reading NocturneChatLog's
+	// ("LOG") reads ConsoleUI.GetRecentEntries instead of othermenu re-reading HyperChatLog's
 	// file by length change - src already mirrors chat into the same in-memory console tail, so
 	// there is no second file to watch and no second copy of the text to keep in sync.
 	internal enum EventCat
@@ -115,7 +115,7 @@ namespace MalumMenu.Cheats
 		}
 
 		// The one reporter every guard patch goes through. Mirrors othermenu's
-		// NocturneSecurityNotify.Fire / NocturneEventNotify.Fire split: the row is always
+		// HyperSecurityNotify.Fire / HyperEventNotify.Fire split: the row is always
 		// recorded, the toast only fires when the matching toggle is on.
 		internal static void Fire(string kind, string text, bool toast, EventCat cat, float ttl = 3.5f)
 		{
@@ -155,7 +155,7 @@ namespace MalumMenu.Cheats
 
 		internal static void Tick()
 		{
-			// rising-edge sabotage detector, ported from NocturneEventNotify.Update
+			// rising-edge sabotage detector, ported from HyperEventNotify.Update
 			if (!CheatToggles.notifySabotage)
 			{
 				return;
@@ -397,7 +397,7 @@ namespace MalumMenu.Cheats
 		}
 	}
 
-	// Ported from othermenu/Menu/NocturneEventLog.cs's MonoBehaviour window.
+	// Ported from othermenu/Menu/HyperEventLog.cs's MonoBehaviour window.
 	public class EventLogWindow : MonoBehaviour
 	{
 		private const int HandlingId = 20073;

@@ -5,7 +5,7 @@ namespace MalumMenu.Cheats
 {
 	// Outfit tools: steal anyone's look, keep 4 favorite outfits,
 	// classic look, and force your look onto others (host).
-	// Ported from othermenu Cheats/NocturneOutfits.cs using only
+	// Ported from othermenu Cheats/HyperOutfits.cs using only
 	// live-verified src APIs (Utilities.CopyPlayer batch pattern).
 	internal static class OutfitTools
 	{

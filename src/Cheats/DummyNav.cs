@@ -8,7 +8,7 @@ using UnityEngine;
 namespace MalumMenu.Cheats
 {
 	// A* pathfinding over embedded per-map waypoint graphs. Ported from
-	// othermenu Nav/NocturneNav.cs. Adaptations: embedded resource lookup by
+	// othermenu Nav/HyperNav.cs. Adaptations: embedded resource lookup by
 	// filename suffix (robust to assembly-namespace naming); JSON parsed with
 	// the same dependency-free string scanner (hubs + spurs, px/qy/edg);
 	// CurrentMapId via GameOptionsManager with no fallback (null graph = AI
