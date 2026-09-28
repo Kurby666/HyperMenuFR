@@ -283,7 +283,7 @@ public struct CheatToggles
 	public static bool autoReportErrors = true;
 
 	// Status HUD
-	public static bool gradientStamp = true;
+	public static bool gradientStamp = false;
 	public static bool showFps;
 	public static bool showLobbyTimer;
 	public static bool showHostLine;

@@ -60,6 +60,14 @@ namespace MalumMenu.Cheats
 
 		internal static string StampLine()
 		{
+			// Plain mode: no per-character <color=...> tags and no phase scroll, so the stamp reads
+			// as ordinary text. The animated gradient is opt-in because scrolling it at GradSpeed
+			// steps a second made this thin text shimmer.
+			if (!CheatToggles.gradientStamp)
+			{
+				return "<b>" + Brand + "</b> v" + MalumMenu.hyperVersion + " by ADHyperActive";
+			}
+
 			Gradient();
 			int i = Wrap((int)(Time.unscaledTime * GradSpeed));
 			return "<b>" + _brand[i] + "</b> " + _ver[i] + " " + _by[i];
@@ -139,6 +147,39 @@ namespace MalumMenu.Cheats
 		private static string BuildLine(int ping)
 		{
 			const string Div = "  <color=#FFFFFF>•</color>  ";
+
+			// Plain mode: the same line with the same separators and the same toggles, but the labels
+			// are literal text instead of the per-character gradient. The phase is never read, so
+			// nothing animates and the stamp cannot flicker.
+			if (!CheatToggles.gradientStamp)
+			{
+				_segs.Clear();
+				_segs.Add($"<b>{Brand}</b> v{MalumMenu.hyperVersion} by ADHyperActive");
+				_segs.Add($"PING <mspace=0.56em><b><color=#FFFFFF>{ping,3}</color></b></mspace> ms");
+
+				if (CheatToggles.showFps)
+				{
+					_segs.Add($"FPS <mspace=0.56em><b><color=#FFFFFF>{CurrentFps,3}</color></b></mspace>");
+				}
+
+				if (CheatToggles.showLobbyTimer && TryLobbyTimer(out int plainRemaining))
+				{
+					string plainValue = $"{plainRemaining / 60}:{plainRemaining % 60:00}";
+					_segs.Add($"Lobby: <mspace=0.56em><b><color=#FFFFFF>{plainValue}</color></b></mspace>");
+				}
+
+				if (CheatToggles.showHostLine && ShipStatus.Instance != null && LobbyBehaviour.Instance == null)
+				{
+					string plainHost = HostName();
+					if (plainHost.Length > 0)
+					{
+						_segs.Add($"Host: {plainHost}");
+					}
+				}
+
+				return "<size=82%>" + string.Join(Div, _segs) + "</size>";
+			}
+
 			Gradient();
 
 			int p = (int)(Time.unscaledTime * GradSpeed);

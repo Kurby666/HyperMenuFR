@@ -427,14 +427,13 @@ public class SettingsTab : ITab
 
         GUILayout.Space(5);
 
-        CheatToggles.gradientStamp = GUILayout.Toggle(CheatToggles.gradientStamp, " Animated Gradient Stamp");
+        CheatToggles.gradientStamp = GUILayout.Toggle(CheatToggles.gradientStamp, " Animated Gradient Stamp (off = plain text)");
 
-        if (CheatToggles.gradientStamp)
-        {
-            CheatToggles.showFps = GUILayout.Toggle(CheatToggles.showFps, " Show FPS in Stamp");
-            CheatToggles.showLobbyTimer = GUILayout.Toggle(CheatToggles.showLobbyTimer, " Show Lobby Timer in Stamp");
-            CheatToggles.showHostLine = GUILayout.Toggle(CheatToggles.showHostLine, " Show Host Under Stamp (In Match)");
-        }
+        // These used to be nested under the gradient toggle, which would have stranded them once
+        // the stamp defaults to plain text. They apply to the stamp either way.
+        CheatToggles.showFps = GUILayout.Toggle(CheatToggles.showFps, " Show FPS in Stamp");
+        CheatToggles.showLobbyTimer = GUILayout.Toggle(CheatToggles.showLobbyTimer, " Show Lobby Timer in Stamp");
+        CheatToggles.showHostLine = GUILayout.Toggle(CheatToggles.showHostLine, " Show Host Under Stamp (In Match)");
 
         GUILayout.Space(5);
 
