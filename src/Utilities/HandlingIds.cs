@@ -36,6 +36,7 @@ public static class HandlingIds
         { 10010, "UI/Windows/TasksUI.cs" },
         { 10011, "UI/Windows/StreamerUI.cs" },
         { 10012, "UpdateCheck.cs" },
+        { 10013, "BugReporter.cs" },
         // Cheats/
         { 20001, "Cheats/MalumRandomizer.cs" },
         { 20002, "Cheats/MalumCheats.cs" },

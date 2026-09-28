@@ -166,6 +166,10 @@ public static class MalumESP
     public static void SeeGhostsCheat(PlayerPhysics playerPhysics)
     {
         try{
+            // myPlayer is null for the stale PlayerPhysics that exists in a lobby, and so is the
+            // local player. Either one dereferenced here threw every frame.
+            if (playerPhysics?.myPlayer == null || playerPhysics.myPlayer.Data == null ||
+                PlayerControl.LocalPlayer == null || PlayerControl.LocalPlayer.Data == null) return;
 
             if(playerPhysics.myPlayer.Data.IsDead && !PlayerControl.LocalPlayer.Data.IsDead)
             {

@@ -11,6 +11,19 @@ public static class TracersHandler
     {
         try
         {
+            // PlayerControl.LocalPlayer is null outside a match - in the main menu AND in a lobby,
+            // where players are LobbyBehaviour + NetworkedPlayerInfo rather than PlayerControls.
+            // This runs every frame, so without the guard it threw per frame and spammed reports.
+            // Data and Data.Role are null on a PlayerControl that is being spawned or torn down,
+            // which is exactly what happens on the way in to and out of a lobby. Role is null for
+            // every lobby player even when Data exists, so all three have to be checked.
+            if (playerPhysics == null || playerPhysics.myPlayer == null || playerPhysics.myPlayer.Data == null ||
+                playerPhysics.myPlayer.Data.Role == null || PlayerControl.LocalPlayer == null ||
+                PlayerControl.LocalPlayer.Data == null)
+            {
+                return;
+            }
+
             var color = Color.clear; // All tracers are invisible by default
 
             if (!playerPhysics.myPlayer.Data.IsDead)

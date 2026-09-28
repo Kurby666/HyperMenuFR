@@ -64,6 +64,18 @@ public class ConfigTab : ITab
                 catch (Exception testEx) { ErrorReporter.Report(testEx, HandlingId, "manual test"); }
             }
 
+            // Uploads this session's errors to the BugSplat database as a single report, with
+            // the session rollup attached.
+            GUILayout.Label($"Distinct errors this session: {BugReporter.PendingCount}"
+                          + $" ({ErrorReporter.RetainedOccurrenceCount} total, {ErrorReporter.UploadedCount} already uploaded)");
+            CheatToggles.autoReportErrors = GUILayout.Toggle(CheatToggles.autoReportErrors,
+                " Upload error logs automatically when closing the game");
+            if (GUILayout.Button("Report Bugs"))
+            {
+                if (BugReporter.Posting) MalumMenu.notifications.Send("BugSplat", "An upload is already running.", 5);
+                else MalumMenu.notifications.Send("BugSplat", BugReporter.PostAll(), 12);
+            }
+
             GUILayout.Space(10);
 
             Spoofer.shouldSpoofVersion = GUILayout.Toggle(Spoofer.shouldSpoofVersion, "Enable Version Spoofing");

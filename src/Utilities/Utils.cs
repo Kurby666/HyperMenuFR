@@ -531,8 +531,11 @@ public static class Utils
     {
         var nameTag = playerName;
 
-        if (playerInfo.Role.IsNull() || playerInfo.IsNull() || playerInfo.Disconnected ||
-            playerInfo.Object.CurrentOutfit.IsNull()) return nameTag;
+        // Order matters and used to be wrong: Role and Object are read before the checks that
+        // make them safe, so a null playerInfo (or a disconnected one with no Object) threw instead
+        // of falling back to the plain name.
+        if (playerInfo.IsNull() || playerInfo.Role.IsNull() || playerInfo.Disconnected ||
+            playerInfo.Object.IsNull() || playerInfo.Object.CurrentOutfit.IsNull()) return nameTag;
 
         var player = AmongUsClient.Instance.GetClientFromPlayerInfo(playerInfo);
         var host = AmongUsClient.Instance.GetHost();
@@ -611,6 +614,11 @@ public static class Utils
             }
             else
             {
+                // The local player's Data/Role are null outside a match and while a lobby is
+                // loading or unloading, even though playerInfo above passed all its own checks.
+                if (PlayerControl.LocalPlayer == null || PlayerControl.LocalPlayer.Data == null ||
+                    PlayerControl.LocalPlayer.Data.Role == null) return nameTag;
+
                 if (PlayerControl.LocalPlayer.Data.Role.NameColor != playerInfo.Role.NameColor || isMatchInfo) return nameTag;
 
                 nameTag = $"<color=#{ColorUtility.ToHtmlStringRGB(playerInfo.Role.NameColor)}>{nameTag}</color>";

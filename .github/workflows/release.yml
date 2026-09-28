@@ -40,20 +40,40 @@ jobs:
 
       - name: Package Distributions
         run: |
+          # Any NuGet dependency the build copies next to the mod has to travel with it.
+          # Without it BepInEx cannot load the assembly, so features depending on it (e.g.
+          # BugSplat crash uploads) fail at runtime instead of at load time. This walks the
+          # build output rather than naming files, so a new dependency needs no change here.
+          DEPS_DIR="$(dirname "$BUILT_DLL_PATH")"
+          copy_deps() {
+            for dll in "$DEPS_DIR"/*.dll; do
+              [ -e "$dll" ] || continue
+              name="$(basename "$dll")"
+              [ "$name" = "$RELEASE_DLL_NAME" ] && continue
+              [ "$name" = "MalumMenu.dll" ] && continue
+              cp "$dll" "$1/$name"
+              echo "  packaged dependency: $name"
+            done
+          }
+
           # Process Steam / Itch.io package
           unzip bep-steam.zip -d build_steam
           mkdir -p build_steam/BepInEx/plugins
           cp "$BUILT_DLL_PATH" "build_steam/BepInEx/plugins/$RELEASE_DLL_NAME"
+          copy_deps "build_steam/BepInEx/plugins"
           cd build_steam && zip -r ../HyperMenu-Steam-Itch.zip . && cd ..
 
           # Process Epic Games / MS Store package
           unzip bep-epic.zip -d build_epic
           mkdir -p build_epic/BepInEx/plugins
           cp "$BUILT_DLL_PATH" "build_epic/BepInEx/plugins/$RELEASE_DLL_NAME"
+          copy_deps "build_epic/BepInEx/plugins"
           cd build_epic && zip -r ../HyperMenu-Epic-MSStore.zip . && cd ..
 
-          # Standalone plugin copy
+          # Standalone plugin copy, plus any dependency DLLs left beside it for the
+          # Publish step below to attach as their own release assets.
           cp "$BUILT_DLL_PATH" "$RELEASE_DLL_NAME"
+          copy_deps "."
 
       - name: Publish Release to GitHub
         env:
@@ -64,9 +84,18 @@ jobs:
             TAG="${{ inputs.tag_name }}"
           fi
 
+          # Any dependency DLLs sitting in the working root (dropped there by the
+          # Package step) become extra assets, so the in-game auto-updater can fetch
+          # them from releases/latest/download/ by name.
+          EXTRA_ASSETS="$(ls -1 ./*.dll 2>/dev/null | grep -v "^./$RELEASE_DLL_NAME$" | tr '\n' ' ')"
+          if [ -n "$EXTRA_ASSETS" ]; then
+            echo "publishing dependency assets: $EXTRA_ASSETS"
+          fi
+
           gh release create "$TAG" \
             --title "Release $TAG" \
             --generate-notes \
             "$RELEASE_DLL_NAME" \
             "HyperMenu-Steam-Itch.zip" \
-            "HyperMenu-Epic-MSStore.zip"
+            "HyperMenu-Epic-MSStore.zip" \
+            $EXTRA_ASSETS

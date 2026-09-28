@@ -280,6 +280,7 @@ public struct CheatToggles
 	public static bool banWords = false;
 	public static bool xmasHostCommand = true;
 	public static bool fcSpoofEnabled = false;
+	public static bool autoReportErrors = true;
 
 	// Status HUD
 	public static bool gradientStamp = true;

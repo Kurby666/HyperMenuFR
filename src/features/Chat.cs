@@ -17,11 +17,13 @@ namespace MalumMenu.features
 			{
 				try
 				{
-					if(sourcePlayer == null) return;
+					// sourcePlayer.Data and the local player's Data are both null while joining or
+					// leaving a lobby, so a bare sourcePlayer check was not enough.
+					if(sourcePlayer == null || sourcePlayer.Data == null) return;
 
 					if(LogChatMessages) MalumMenu.Log.LogMessage($"[ChatLogger] {sourcePlayer.Data.PlayerName}: {chatText}");
 
-					if(ShowMessagesByGhosts && !PlayerControl.LocalPlayer.Data.IsDead && sourcePlayer.Data.IsDead)
+					if(ShowMessagesByGhosts && PlayerControl.LocalPlayer?.Data != null && !PlayerControl.LocalPlayer.Data.IsDead && sourcePlayer.Data.IsDead)
 					{
 						__instance.AddChatWarning($"{sourcePlayer.Data.PlayerName}\n{chatText}");
 					}

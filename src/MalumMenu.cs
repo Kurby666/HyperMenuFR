@@ -44,6 +44,7 @@ public partial class MalumMenu : BasePlugin
     public static Cheats.StatusHud statusHud;
     public static Cheats.RadialMenu radialMenu;
     public static Cheats.GlichRooms glichRooms;
+    public static BugReporter.QuitHook bugQuitHook;
     public static KeybindListener keybindListener;
     public static UpdateCheck updateCheck;
 
@@ -289,6 +290,7 @@ public partial class MalumMenu : BasePlugin
         statusHud = AddComponent<Cheats.StatusHud>();
         radialMenu = AddComponent<Cheats.RadialMenu>();
         glichRooms = AddComponent<Cheats.GlichRooms>();
+        bugQuitHook = AddComponent<BugReporter.QuitHook>();
         // rolesUI = AddComponent<RolesUI>();
 
         // Components

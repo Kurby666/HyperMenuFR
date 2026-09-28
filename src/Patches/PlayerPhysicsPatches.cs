@@ -12,6 +12,16 @@ public static class PlayerPhysics_LateUpdate
     {
         try
         {
+            // PlayerControl.LateUpdate still fires in a lobby (a stale PlayerPhysics hangs around)
+            // but there is no local PlayerControl until the match spawns us. Everything below is an
+            // in-match concept, so bail rather than let each one throw a NullReferenceException per
+            // frame. This is the driver-level fix for the whole 20002/20008/20015 family.
+            // Require a fully-spawned local player, not just a non-null reference: Data and
+            // Data.Role are null on a PlayerControl that is being created or destroyed, and Role
+            // is null for lobby players. Everything below is in-match, so this is the right gate.
+            PlayerControl local = PlayerControl.LocalPlayer;
+            if (local == null || local.Data == null || local.Data.Role == null) return;
+
             MalumESP.PlayerNametags(__instance);
             MalumESP.SeeGhostsCheat(__instance);
 
@@ -62,6 +72,10 @@ public static class PlayerPhysics_LateUpdate
                 {
                     if (deadBody.Reported) continue;
 
+                    // Same story: no local PlayerControl and no GameData outside a match, so
+                    // CmdReportDeadBody could not be called and would throw instead.
+                    if (PlayerControl.LocalPlayer == null || GameData.Instance == null) continue;
+
                     deadBody.Reported = true;
 
                     PlayerControl.LocalPlayer.CmdReportDeadBody(GameData.Instance.GetPlayerById(deadBody.ParentId));
@@ -70,6 +84,14 @@ public static class PlayerPhysics_LateUpdate
 
             try
             {
+                // No local PlayerControl outside a match (main menu or lobby), so MyPhysics is
+                // null there. PlayerPhysics.LateUpdate runs every frame, so this reported a
+                // NullReferenceException continuously while the user sat in a lobby.
+                if (PlayerControl.LocalPlayer?.MyPhysics == null)
+                {
+                    return;
+                }
+
                 if (CheatToggles.invertControls)
                 {
                     PlayerControl.LocalPlayer.MyPhysics.Speed = -Mathf.Abs(PlayerControl.LocalPlayer.MyPhysics.Speed);

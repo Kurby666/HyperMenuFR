@@ -41,23 +41,31 @@ public static class HudManager_Update
     {
         try
         {
-            __instance.ShadowQuad.gameObject.SetActive(!MalumESP.IsFullbrightActive()); // Fullbright
-
-            if (Utils.IsChatUiActive()) // AlwaysChat
+            // Same story as PlayerPhysics_LateUpdate: HudManager.Update runs every frame including
+            // in a lobby, where there is no local PlayerControl and the match HUD parts below have
+            // not been built yet. Guard the in-match block as a whole.
+            PlayerControl local = PlayerControl.LocalPlayer;
+            if (local != null && local.Data != null && local.Data.Role != null && __instance.ShadowQuad != null)
             {
-                __instance.Chat.gameObject.SetActive(true);
-            }
-            else
-            {
-                Utils.CloseChat();
-                __instance.Chat.gameObject.SetActive(false);
-            }
+                __instance.ShadowQuad.gameObject.SetActive(!MalumESP.IsFullbrightActive()); // Fullbright
 
-            MalumCheats.UseVentCheat(__instance);
-            MalumESP.ZoomOut(__instance);
-            MalumESP.FreecamCheat();
+                if (Utils.IsChatUiActive()) // AlwaysChat
+                {
+                    __instance.Chat.gameObject.SetActive(true);
+                }
+                else
+                {
+                    Utils.CloseChat();
+                    __instance.Chat.gameObject.SetActive(false);
+                }
+
+                MalumCheats.UseVentCheat(__instance);
+                MalumESP.ZoomOut(__instance);
+                MalumESP.FreecamCheat();
+            }
 
             // Close PlayerPickMenu if there is no PPM cheat enabled
+            // (deliberately outside the guard, so a PPM can never be orphaned by leaving a match)
             if (PlayerPickMenu.playerpickMenu != null && CheatToggles.ShouldPPMClose())
             {
                 PlayerPickMenu.playerpickMenu.Close();

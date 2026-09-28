@@ -25,6 +25,13 @@ public class UpdateCheck : MonoBehaviour
     private const string VersionUrl = "https://raw.githubusercontent.com/The-HyperMenu-Team/HyperMenu/main/version.json";
     private const string DownloadUrl = "https://github.com/The-HyperMenu-Team/HyperMenu/releases/latest/download/HyperMenu.dll";
 
+    // The mod has a NuGet dependency (BugSplatDotNetStandard) that has to sit in the same
+    // BepInEx/plugins folder or that assembly cannot load. The release workflow publishes it
+    // as its own asset alongside HyperMenu.dll, so the auto-updater has to fetch it too -
+    // otherwise updating replaces the mod and silently breaks crash reporting.
+    private const string DependencyUrl = "https://github.com/The-HyperMenu-Team/HyperMenu/releases/latest/download/BugSplatDotNetStandard.dll";
+    private const string DependencyName = "BugSplatDotNetStandard.dll";
+
     private static readonly HttpClient Http = MakeClient();
 
     internal static UpdateState State { get; private set; } = UpdateState.Idle;
@@ -203,12 +210,43 @@ public class UpdateCheck : MonoBehaviour
 
             State = UpdateState.Done;
             MalumMenu.notifications.Send("Update", "Installed. Restart the game.", 10);
+
+            // Deliberately after the mod is in place and the user has been told: if this
+            // fails the mod still works, just without crash uploads.
+            InstallDependency(pluginDir);
         }
         catch (Exception ex)
         {
             ErrorReporter.Report(ex, HandlingId, "UpdateCheck.Install: replace plugin dll");
             Fail(ex.GetType().Name + ": " + ex.Message);
             MalumMenu.notifications.Send("Update", "Install failed: " + Error, 10);
+        }
+    }
+
+    [HideFromIl2Cpp]
+    private static void InstallDependency(string pluginDir)
+    {
+        try
+        {
+            string dep = Path.Combine(pluginDir, DependencyName);
+            if (File.Exists(dep) && new FileInfo(dep).Length >= 1024) return;
+
+            byte[] data = Http.GetByteArrayAsync(DependencyUrl).GetAwaiter().GetResult();
+            if (data == null || data.Length < 1024)
+            {
+                ConsoleUI.Log("[HyperMenu] Update: " + DependencyName + " download looked wrong, skipping.");
+                return;
+            }
+
+            File.WriteAllBytes(dep, data);
+            ConsoleUI.Log("[HyperMenu] Update: installed " + DependencyName + " (" + data.Length + " bytes).");
+        }
+        catch (Exception ex)
+        {
+            // Never fail the install over this. An older release may simply not have the
+            // asset yet, and a missing dependency only affects crash uploads, not loading.
+            ConsoleUI.Log("[HyperMenu] Update: could not fetch " + DependencyName + " - "
+                + ex.GetType().Name + ": " + ex.Message);
         }
     }
 

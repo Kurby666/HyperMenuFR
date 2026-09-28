@@ -63,14 +63,369 @@ public static class ErrorReporter
     }
 
     /// <summary>
+    /// Rollup of every report written this run, as
+    /// <c>&lt;GameRoot&gt;/HyperMenu/SessionErr_MM_dd_yyyy_HH_mm_ss.txt</c> - one file per
+    /// game launch. <see cref="SessionStart"/> is a static field initialiser, so it is captured
+    /// the first time ErrorReporter is touched (at mod startup), which is what makes the
+    /// filename the launch time rather than the time of the first error. The file itself is
+    /// only created once there is something to write, so a clean run leaves no file behind.
+    /// </summary>
+    private static readonly DateTime SessionStart = DateTime.Now;
+
+    private static readonly object _sessionLock = new();
+    private static string _sessionErrPath;
+
+    /// <summary>Full path of this session's rollup file, or null if it cannot be resolved.</summary>
+    public static string SessionErrPath
+    {
+        get
+        {
+            lock (_sessionLock)
+            {
+                if (_sessionErrPath == null)
+                {
+                    try
+                    {
+                        _sessionErrPath = Path.Combine(BaseDir,
+                            "SessionErr_" + SessionStart.ToString("MM_dd_yyyy_HH_mm_ss") + ".txt");
+                    }
+                    catch { return null; }
+                }
+                return _sessionErrPath;
+            }
+        }
+    }
+
+    private const string SessionDivider =
+        "--------------------------------------------------------------------------------";
+
+    /// <summary>
+    /// Appends one report plus a divider to this session's SessionErr_*.txt rollup.
+    /// Never throws: failing here must not cost us the report we just built, and must never
+    /// propagate back out of the catch block that called <see cref="Report(Exception, int, string, string)"/>.
+    /// </summary>
+    private static readonly System.Collections.Generic.HashSet<string> _sessionSeen = new();
+
+    // ---------------------------------------------------------------- uploaded-error ledger
+    // Signatures of errors already shipped to BugSplat. Persisted to UploadedErrors.json so that
+    // quitting and relaunching does not re-send them. Hand-rolled JSON on purpose: the project
+    // has no JSON dependency and UpdateCheck.cs already parses JSON by hand, so this keeps
+    // that pattern rather than pulling in another assembly under IL2CPP.
+    private static readonly System.Collections.Generic.HashSet<string> _uploadedSignatures =
+        new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
+    private static bool _uploadedDirty;
+
+    /// <summary>Path of the JSON ledger of already-uploaded error signatures.</summary>
+    public static string UploadedLogPath => Path.Combine(BaseDir, "UploadedErrors.json");
+
+    /// <summary>How many distinct error signatures have been uploaded to BugSplat.</summary>
+    public static int UploadedCount
+    {
+        get { lock (_lock) { return _uploadedSignatures.Count; } }
+    }
+
+    /// <summary>True when at least one retained error has not been uploaded yet.</summary>
+    public static bool HasUnuploadedErrors
+    {
+        get
+        {
+            try
+            {
+                RetainedError[] pending = SnapshotRetainedErrors();
+                if (pending == null) return false;
+                lock (_lock)
+                {
+                    for (int i = 0; i < pending.Length; i++)
+                    {
+                        if (pending[i] == null) continue;
+                        if (!_uploadedSignatures.Contains(pending[i].Signature ?? string.Empty)) return true;
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Records the given errors as uploaded and persists the ledger. The file is only rewritten
+    /// when something was actually added, so quitting with no new errors leaves it untouched.
+    /// </summary>
+    public static void MarkUploaded(System.Collections.Generic.IEnumerable<RetainedError> items)
+    {
+        try
+        {
+            if (items == null) return;
+            bool added = false;
+            lock (_lock)
+            {
+                foreach (RetainedError item in items)
+                {
+                    if (item == null) continue;
+                    string sig = item.Signature ?? string.Empty;
+                    if (sig.Length == 0) continue;
+                    if (_uploadedSignatures.Add(sig)) added = true;
+                }
+                if (added) _uploadedDirty = true;
+            }
+            if (added) SaveUploadedLog();
+        }
+        catch { }
+    }
+
+    private static void LoadUploadedLog()
+    {
+        try
+        {
+            string path = UploadedLogPath;
+            if (!File.Exists(path)) return;
+            string[] lines = File.ReadAllLines(path);
+            lock (_lock)
+            {
+                foreach (string raw in lines)
+                {
+                    string line = (raw ?? string.Empty).Trim();
+                    if (line.Length < 2) continue;
+                    if (line[0] != '"' || line[line.Length - 1] != '"') continue;
+                    string decoded = UnescapeJson(line.Substring(1, line.Length - 2));
+                    if (decoded.Length > 0) _uploadedSignatures.Add(decoded);
+                }
+                _uploadedDirty = false;
+            }
+        }
+        catch { }
+    }
+
+    private static void SaveUploadedLog()
+    {
+        try
+        {
+            System.Collections.Generic.List<string> ordered;
+            lock (_lock)
+            {
+                if (!_uploadedDirty) return;   // nothing new - leave the file exactly as it is
+                ordered = new System.Collections.Generic.List<string>(_uploadedSignatures);
+                _uploadedDirty = false;
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{\n  \"version\": 1,\n");
+            sb.Append("  \"updatedUtc\": \"").Append(DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")).Append("\",\n");
+            sb.Append("  \"signatures\": [\n");
+            for (int i = 0; i < ordered.Count; i++)
+            {
+                sb.Append("    \"").Append(EscapeJson(ordered[i])).Append('"');
+                if (i < ordered.Count - 1) sb.Append(',');
+                sb.Append('\n');
+            }
+            sb.Append("  ]\n}\n");
+            File.WriteAllText(UploadedLogPath, sb.ToString());
+        }
+        catch { }
+    }
+
+    private static string EscapeJson(string value)
+    {
+        if (string.IsNullOrEmpty(value)) return string.Empty;
+        return value.Replace("\\", "\\\\").Replace("\"", "\\\"");
+    }
+
+    private static string UnescapeJson(string value)
+    {
+        if (string.IsNullOrEmpty(value)) return string.Empty;
+        return value.Replace("\\\"", "\"").Replace("\\\\", "\\");
+    }
+
+    /// <summary>Report file already written for a given signature this session, and how many
+    /// times it has been seen since. Keeps ErrorReports/ at one file per distinct fault.</summary>
+    private static readonly System.Collections.Generic.Dictionary<string, string> _fileBySignature = new();
+    private static readonly System.Collections.Generic.Dictionary<string, int> _occurrencesBySignature = new();
+
+    private static void AppendToSessionLog(string body, string signature)
+    {
+        try
+        {
+            string target = SessionErrPath;
+            if (string.IsNullOrEmpty(target)) return;
+
+            bool repeat;
+            lock (_lock) { repeat = signature != null && !_sessionSeen.Add(signature); }
+
+            if (repeat)
+            {
+                // Already written once this session. The file stays chronological, but a
+                // repeat costs one line instead of another full copy of the same report.
+                File.AppendAllText(target,
+                    "   ... repeat of the identical error above" + Environment.NewLine);
+                return;
+            }
+
+            File.AppendAllText(target,
+                (body ?? "") + Environment.NewLine + SessionDivider + Environment.NewLine);
+        }
+        catch { }
+    }
+
+    /// <summary>
     /// Creates the HyperMenu/ErrorReports/ConsoleLogs folders. Call from MalumMenu.Load
     /// at mod startup, before <see cref="Initialize"/>. Never throws.
     /// </summary>
+    /// <summary>One error kept in memory so it can be uploaded to BugSplat later.</summary>
+    public sealed class RetainedError
+    {
+        public Exception Exception;
+        public string PlainMessage;
+        public int HandlingId;
+        public string Context;
+        public DateTime When;
+        public DateTime LastSeen;
+        /// <summary>How many times this exact fault was reported this session.</summary>
+        public int Count;
+        /// <summary>Identity of the fault, used to collapse repeats. See <see cref="Signature"/>.</summary>
+        public string Signature;
+    }
+
+    private const int MaxRetainedErrors = 50;
+    private static readonly System.Collections.Generic.List<RetainedError> _retained = new();
+    private static readonly System.Collections.Generic.Dictionary<string, RetainedError> _retainedBySignature = new();
+
+    /// <summary>How many DISTINCT errors are waiting to be uploaded this session.</summary>
+    public static int RetainedErrorCount
+    {
+        get { lock (_lock) { return _retained.Count; } }
+    }
+
+    /// <summary>Total occurrences this session, counting repeats of an already-seen fault.</summary>
+    public static int RetainedOccurrenceCount
+    {
+        get
+        {
+            lock (_lock)
+            {
+                int n = 0;
+                foreach (var e in _retained) n += e.Count;
+                return n;
+            }
+        }
+    }
+
+    /// <summary>Snapshot of the DISTINCT retained errors, noisiest first.</summary>
+    public static RetainedError[] SnapshotRetainedErrors()
+    {
+        lock (_lock)
+        {
+            var copy = new System.Collections.Generic.List<RetainedError>(_retained);
+            copy.Sort(delegate (RetainedError a, RetainedError b)
+            {
+                int c = b.Count.CompareTo(a.Count);
+                if (c != 0) return c;
+                return a.When.CompareTo(b.When);
+            });
+            return copy.ToArray();
+        }
+    }
+
+    /// <summary>
+    /// Identity of a fault, so that the same thing reported every frame collapses into one
+    /// entry instead of one entry per frame. Built from the exception type, the handling id,
+    /// the call site context, the innermost stack frame, and the message with all digit runs
+    /// collapsed - ids, counts, coordinates and timestamps vary between occurrences of one
+    /// bug and would otherwise split it into many.
+    /// </summary>
+    private static string Signature(Exception ex, string plainMessage, int handlingId, string context)
+    {
+        try
+        {
+            string type = ex != null ? ex.GetType().FullName : "System.Exception";
+
+            string where = "";
+            try
+            {
+                string st = ex != null ? ex.StackTrace : null;
+                if (!string.IsNullOrEmpty(st))
+                {
+                    int nl = st.IndexOf('\n');
+                    where = (nl < 0 ? st : st.Substring(0, nl)).Trim();
+                }
+            }
+            catch { }
+
+            return type + "|" + handlingId + "|" + (context ?? "") + "|"
+                 + where + "|" + CollapseDigits(ex != null ? ex.Message : plainMessage);
+        }
+        catch { return "fallback|" + handlingId; }
+    }
+
+    private static string CollapseDigits(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return "";
+        var sb = new System.Text.StringBuilder(s.Length);
+        bool inRun = false;
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (char.IsDigit(s[i]))
+            {
+                if (!inRun) { sb.Append('#'); inRun = true; }
+            }
+            else { sb.Append(s[i]); inRun = false; }
+        }
+        return sb.ToString();
+    }
+
+    // Keeps the Exception object itself, not just its text, because BugSplat is posted the
+    // live exception so the server sees the real type, message and stack trace. Bounded so a
+    // long session with a recurring fault cannot grow this without limit.
+    private static void Retain(Exception ex, string plainMessage, int handlingId, string context,
+                               string signature)
+    {
+        try
+        {
+            lock (_lock)
+            {
+                // One entry per distinct fault. A fault that fires every frame must not turn
+                // into dozens of identical uploads and dozens of rollup entries; repeats only
+                // bump the counter and the last-seen time.
+                if (signature != null && _retainedBySignature.TryGetValue(signature, out var seen))
+                {
+                    seen.Count++;
+                    seen.LastSeen = DateTime.Now;
+                    return;
+                }
+
+                var entry = new RetainedError
+                {
+                    Exception = ex ?? new Exception(plainMessage ?? "Unknown error"),
+                    PlainMessage = plainMessage,
+                    HandlingId = handlingId,
+                    Context = context,
+                    When = DateTime.Now,
+                    LastSeen = DateTime.Now,
+                    Count = 1,
+                    Signature = signature
+                };
+                _retained.Add(entry);
+                if (signature != null) _retainedBySignature[signature] = entry;
+
+                // Bounded: drop the oldest distinct fault once we exceed the cap.
+                while (_retained.Count > MaxRetainedErrors)
+                {
+                    var oldest = _retained[0];
+                    _retained.RemoveAt(0);
+                    if (oldest.Signature != null) _retainedBySignature.Remove(oldest.Signature);
+                }
+            }
+        }
+        catch { }
+    }
+
     public static void EnsureDirectories()
     {
         try { Directory.CreateDirectory(BaseDir); } catch { }
+        try { LoadUploadedLog(); } catch { }
         try { Directory.CreateDirectory(ReportDir); } catch { }
         try { Directory.CreateDirectory(ConsoleLogsDir); } catch { }
+        // Resolving the path here triggers the SessionStart initialiser, so the rollup
+        // filename reflects the launch time even if the first error is much later.
+        try { string pinned = SessionErrPath; } catch { }
     }
 
     /// <summary>
@@ -203,14 +558,40 @@ public static class ErrorReporter
                 + "Error: " + (ex != null ? ex.ToString() : plainMessage) + "\n";
         }
 
+        // Rollup happens before the per-report file is attempted, so the session log still
+        // captures the report if ErrorReports/ itself cannot be written.
+        string signature = Signature(ex, plainMessage, handlingId, context);
+
+        AppendToSessionLog(body, signature);
+
+        // Retained after the storm throttle above, so only errors that produced a real report
+        // are ever queued for upload.
+        Retain(ex, plainMessage, handlingId, context, signature);
+
         string path = null;
         try
         {
+            string existing = null;
+            lock (_lock) { _fileBySignature.TryGetValue(signature, out existing); }
+
+            if (!string.IsNullOrEmpty(existing) && File.Exists(existing))
+            {
+                // The same fault again this session. Add a single occurrence line to the file
+                // that already describes it rather than writing a byte-identical copy, and
+                // stay quiet so a per-frame fault cannot spam notifications either.
+                int seen;
+                lock (_lock) { _occurrencesBySignature.TryGetValue(signature, out seen); seen++; _occurrencesBySignature[signature] = seen; }
+                File.AppendAllText(existing,
+                    "   ... occurrence " + seen + " (identical error, full report above)" + Environment.NewLine);
+                return existing;
+            }
+
             Directory.CreateDirectory(ReportDir);
             string stamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
             string unique = Guid.NewGuid().ToString("N").Substring(0, 4);
             path = Path.Combine(ReportDir, "HyperError_" + stamp + "_" + FormatId(handlingId) + "_" + unique + ".txt");
             File.WriteAllText(path, body);
+            lock (_lock) { _fileBySignature[signature] = path; _occurrencesBySignature[signature] = 1; }
         }
         catch { return null; }
 

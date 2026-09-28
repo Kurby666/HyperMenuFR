@@ -226,6 +226,14 @@ public static class MalumCheats
         try
         {
 
+			// There is no local PlayerControl outside a match (main menu or lobby), and HudManager
+			// has no ImpostorVentButton until the match builds its HUD. This is called every frame
+			// from the HudManager patch, so it used to throw a NullReferenceException every frame.
+			if (PlayerControl.LocalPlayer?.Data?.Role == null || hudManager?.ImpostorVentButton == null)
+			{
+				return;
+			}
+
 			// Engineers & Impostors don't need this cheat so it is disabled for them
 			// Ghost venting causes issues so it is also disabled
 
@@ -357,6 +365,8 @@ public static class MalumCheats
     {
         try
         {
+            // No local PlayerControl outside a match (main menu or lobby).
+            if (PlayerControl.LocalPlayer == null) return;
 
             PlayerControl.LocalPlayer.Collider.enabled = !(CheatToggles.noClip || PlayerControl.LocalPlayer.onLadder);
 
