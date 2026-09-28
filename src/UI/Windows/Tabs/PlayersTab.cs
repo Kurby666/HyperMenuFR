@@ -250,17 +250,7 @@ public class PlayersTab : ITab
         }
         GUILayout.EndHorizontal();
 
-        string jailLabel = MalumMenu.routines.jailPlayer.IsSelected(target) ? "UNJAIL" : "JAIL";
-        if (GUILayout.Button(jailLabel))
-        {
-            MalumMenu.routines.jailPlayer.ToggleSelect(target);
-        }
-
-        string godLabel = GodMode.IsGranted(target.PlayerId) ? "UNGOD" : "GOD";
-        if (GUILayout.Button(godLabel))
-        {
-            MalumMenu.notifications.Send("God Mode", GodMode.Toggle(target));
-        }
+ 
 
         GUILayout.BeginHorizontal();
         string vkTargetLabel = VotekickTools.IsTarget(target.PlayerId) ? "AUTO ✓" : "AUTO";
@@ -292,6 +282,10 @@ public class PlayersTab : ITab
         {
             MalumMenu.notifications.Send("Pet Hand", Cheats.PetHand.Grab(target));
         }
+        if (GUILayout.Button("Stop"))
+        {
+            Cheats.PetHand.Stop();
+        }
         string petFollowLabel = Cheats.PetHand.IsFollow(target.PlayerId) ? "PET-FOLLOW ✓" : "PET-FOLLOW";
         if (GUILayout.Button(petFollowLabel))
         {
@@ -299,6 +293,7 @@ public class PlayersTab : ITab
         }
         GUILayout.EndHorizontal();
 
+        GUILayout.Label("Zipline Controls");
         GUILayout.BeginHorizontal();
         string rideLabel = Cheats.RideTargets.Has(target.PlayerId) ? "RIDE ✓" : "RIDE";
         if (GUILayout.Button(rideLabel))
@@ -315,6 +310,8 @@ public class PlayersTab : ITab
         }
         GUILayout.EndHorizontal();
 
+        GUILayout.Space(5);
+
         if (GUILayout.Button($"FRAME ({Cheats.FrameSabotage.SystemName(CheatToggles.frameSystemIdx)}, {CheatToggles.frameValue})"))
         {
             MalumMenu.notifications.Send("Frame Sabotage", Cheats.FrameSabotage.Send(target, Cheats.FrameSabotage.Systems[CheatToggles.frameSystemIdx % Cheats.FrameSabotage.Systems.Length], (byte)CheatToggles.frameValue));
@@ -327,6 +324,18 @@ public class PlayersTab : ITab
 
         GUILayout.Space(5);
         GUILayout.Label("Host Only Features:" + (AmongUsClient.Instance.AmHost ? "" : "\n(Using these will get you kicked!)"));
+
+        string jailLabel = MalumMenu.routines.jailPlayer.IsSelected(target) ? "UNJAIL" : "JAIL";
+        if (GUILayout.Button(jailLabel))
+        {
+            MalumMenu.routines.jailPlayer.ToggleSelect(target);
+        }
+
+        string godLabel = GodMode.IsGranted(target.PlayerId) ? "UNGOD" : "GOD";
+        if (GUILayout.Button(godLabel))
+        {
+            MalumMenu.notifications.Send("God Mode", GodMode.Toggle(target));
+        }
 
         if (GUILayout.Button("Force Meeting As"))
         {
