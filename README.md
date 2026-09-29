@@ -6,6 +6,7 @@
 # NOTICE:
 * This menu is forked from the original MalumMenu. All credit goes to scp222thj.
   * To access the original, click [here](https://github.com/scp222thj/MalumMenu) or go to https://github.com/scp222thj/MalumMenu
+* This menu also has code pulled from both [Hydra](https://github.com/MrDiamond64/Hydra) and [OnyxMenu](https://github.com/Veltrix-s/OnyxMenu).
 ---
 ## Our Discord:
 https://discord.gg/gkpdeAX5u9
