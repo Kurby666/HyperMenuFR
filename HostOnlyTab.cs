@@ -4,7 +4,7 @@ namespace MalumMenu;
 
 public class HostOnlyTab : ITab
 {
-    public string name => "Hôte uniquement";
+    public string name => "Hôte";
 
     public void Draw()
     {
