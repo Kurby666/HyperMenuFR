@@ -10,7 +10,7 @@ namespace MalumMenu;
 
 public class HostOnlyTab2 : ITab
 {
-    public string name => "Hôte uniquement 2";
+    public string name => "Hôte 2";
 
     private byte selectedMap = 0;
 
