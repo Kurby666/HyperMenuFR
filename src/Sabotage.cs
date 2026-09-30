@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace MalumMenu
 {
@@ -14,84 +14,73 @@ namespace MalumMenu
 
         public static Dictionary<string, SystemTypes> skeldSabotages = new Dictionary<string, SystemTypes>()
         {
-            { "Reactor", SystemTypes.Reactor },
-            { "Oxygen", SystemTypes.LifeSupp },
-            { "Lights", SystemTypes.Electrical },
+            { "Réacteur", SystemTypes.Reactor },
+            { "Oxygène", SystemTypes.LifeSupp },
+            { "Lumières", SystemTypes.Electrical },
             { "Communications", SystemTypes.Comms }
         };
 
         public static Dictionary<string, SystemTypes> skeldDoors = new Dictionary<string, SystemTypes>()
         {
-            { "Cafeteria", SystemTypes.Cafeteria },
-            { "Storage", SystemTypes.Storage },
-            { "Medbay", SystemTypes.MedBay },
-            { "Security", SystemTypes.Security },
-            { "Upper Engine", SystemTypes.UpperEngine },
-            { "Lower Engine", SystemTypes.LowerEngine },
-            { "Electrical", SystemTypes.Electrical }
+            { "Cafétéria", SystemTypes.Cafeteria },
+            { "Stockage", SystemTypes.Storage },
+            { "Infirmerie", SystemTypes.MedBay },
+            { "Sécurité", SystemTypes.Security },
+            { "Moteur supérieur", SystemTypes.UpperEngine },
+            { "Moteur inférieur", SystemTypes.LowerEngine },
+            { "Électrique", SystemTypes.Electrical }
         };
 
         public static Dictionary<string, SystemTypes> miraSabotages = new Dictionary<string, SystemTypes>()
         {
-            { "Reactor", SystemTypes.Reactor },
-            { "Oxygen", SystemTypes.LifeSupp },
-            { "Lights", SystemTypes.Electrical },
+            { "Réacteur", SystemTypes.Reactor },
+            { "Oxygène", SystemTypes.LifeSupp },
+            { "Lumières", SystemTypes.Electrical },
             { "Communications", SystemTypes.Comms }
         };
 
         public static Dictionary<string, SystemTypes> polusSabotages = new Dictionary<string, SystemTypes>()
         {
-            { "Reactor", SystemTypes.Laboratory },
-            { "Lights", SystemTypes.Electrical },
+            { "Réacteur", SystemTypes.Laboratory },
+            { "Lumières", SystemTypes.Electrical },
             { "Communications", SystemTypes.Comms }
         };
 
         public static Dictionary<string, SystemTypes> polusDoors = new Dictionary<string, SystemTypes>()
         {
-            { "Office", SystemTypes.Office },
+            { "Bureau", SystemTypes.Office },
             { "Communications", SystemTypes.Comms },
-            { "Laboratory", SystemTypes.Laboratory },
-            { "Decontamination", SystemTypes.Decontamination },
-            { "Electrical", SystemTypes.Electrical },
-            { "Oxygen", SystemTypes.LifeSupp },
-            { "Weapons", SystemTypes.Weapons },
-            { "Storage", SystemTypes.Storage }
+            { "Laboratoire", SystemTypes.Laboratory },
+            { "Décontamination", SystemTypes.Decontamination },
+            { "Électrique", SystemTypes.Electrical },
+            { "Oxygène", SystemTypes.LifeSupp },
+            { "Armurerie", SystemTypes.Weapons },
+            { "Stockage", SystemTypes.Storage }
         };
 
         public static Dictionary<string, SystemTypes> airshipSabotages = new Dictionary<string, SystemTypes>()
         {
-            { "Reactor", SystemTypes.HeliSabotage },
-            { "Lights", SystemTypes.Electrical },
+            { "Réacteur", SystemTypes.HeliSabotage },
+            { "Lumières", SystemTypes.Electrical },
             { "Communications", SystemTypes.Comms }
         };
 
         public static Dictionary<string, SystemTypes> airshipDoors = new Dictionary<string, SystemTypes>()
         {
-            { "Brig", SystemTypes.Brig },
-            { "Records", SystemTypes.Records },
+            { "Cellule", SystemTypes.Brig },
+            { "Archives", SystemTypes.Records },
             { "Communications", SystemTypes.Comms },
-            { "Main Hall", SystemTypes.MainHall },
-            { "Kitchen", SystemTypes.Kitchen },
-            { "Medical", SystemTypes.Medical },
-            { "Lounge", SystemTypes.Lounge }
+            { "Hall principal", SystemTypes.MainHall },
+            { "Cuisine", SystemTypes.Kitchen },
+            { "Médical", SystemTypes.Medical },
+            { "Salon", SystemTypes.Lounge }
         };
 
         public static Dictionary<string, SystemTypes> fungleSabotages = new Dictionary<string, SystemTypes>()
         {
-            { "Reactor", SystemTypes.Reactor },
+            { "Réacteur", SystemTypes.Reactor },
             { "Communications", SystemTypes.Comms },
-            { "Mushroom Mixup", SystemTypes.MushroomMixupSabotage }
-        };
-
-        public static Dictionary<string, SystemTypes> fungleDoors = new Dictionary<string, SystemTypes>()
-        {
-            { "Storage", SystemTypes.Storage },
-            { "Kitchen", SystemTypes.Kitchen },
-            { "Laboratory", SystemTypes.Laboratory },
-            { "Lookout", SystemTypes.Lookout },
-            { "Mining Pit", SystemTypes.MiningPit },
-            { "Communications", SystemTypes.Comms },
-            { "Reactor", SystemTypes.Reactor }
+            { "Mélange de champignons", SystemTypes.MushroomMixupSabotage }
         };
 
         public static Dictionary<string, SystemTypes> GetSabotages()
@@ -117,7 +106,6 @@ namespace MalumMenu
                 MapNames.MiraHQ => [],
                 MapNames.Polus => polusDoors,
                 MapNames.Airship => airshipDoors,
-                MapNames.Fungle => fungleDoors,
                 _ => skeldDoors,
             };
         }
