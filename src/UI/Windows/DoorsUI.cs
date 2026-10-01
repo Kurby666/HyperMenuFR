@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Il2CppSystem.Collections.Generic;
 
@@ -6,7 +5,6 @@ namespace MalumMenu;
 
 public class DoorsUI : MonoBehaviour
 {
-    private const int HandlingId = 10009;
     public static int windowHeight = 270;
     public static int windowWidth = 480;
     public static Rect windowRect;
@@ -16,30 +14,48 @@ public class DoorsUI : MonoBehaviour
 
     private void Start()
     {
-        try
-        {
-            // Instantiate 2D area of DoorsUI
-            windowRect = new(
-                Screen.width / 2f - windowWidth / 2f,
-                Screen.height / 2f - windowHeight / 2f,
-                windowWidth,
-                windowHeight
-            );
-        }
-        catch (Exception ex) { ErrorReporter.Report(ex, HandlingId, "DoorsUI.Start: init window rect"); }
+        // Initialise la zone 2D de DoorsUI
+        windowRect = new(
+            Screen.width / 2f - windowWidth / 2f,
+            Screen.height / 2f - windowHeight / 2f,
+            windowWidth,
+            windowHeight
+        );
     }
 
     private void OnGUI()
     {
-        try
+        if (!CheatToggles.showDoorsMenu || !(MenuUI.isGUIActive || MalumMenu.menuKeepSubwindowsOpen.Value) || MalumMenu.isPanicked) return;
+
+        UIHelpers.ApplyUIColor();
+
+        windowRect = GUI.Window((int)WindowId.DoorsUI, windowRect, (GUI.WindowFunction)DoorsWindow, "Portes");
+    }
+
+    private string GetRoomName(SystemTypes room)
+    {
+        switch (room.ToString())
         {
-            if (!CheatToggles.showDoorsMenu || !(MenuUI.isGUIActive || MalumMenu.menuKeepSubwindowsOpen.Value) || MalumMenu.isPanicked) return;
-
-            UIHelpers.ApplyUIColor();
-
-            windowRect = GUI.Window((int)WindowId.DoorsUI, windowRect, (GUI.WindowFunction)DoorsWindow, "Doors");
+            case "Cafeteria": return "Cafétéria";
+            case "Storage": return "Stockage";
+            case "MedBay": return "Infirmerie";
+            case "Security": return "Sécurité";
+            case "UpperEngine": return "Moteur supérieur";
+            case "LowerEngine": return "Moteur inférieur";
+            case "Electrical": return "Électrique";
+            case "Office": return "Bureau";
+            case "Laboratory": return "Laboratoire";
+            case "Decontamination": return "Décontamination";
+            case "Weapons": return "Armurerie";
+            case "Comms": return "Communications";
+            case "Brig": return "Cellule";
+            case "Records": return "Archives";
+            case "MainHall": return "Hall principal";
+            case "Kitchen": return "Cuisine";
+            case "Medical": return "Médical";
+            case "Lounge": return "Salon";
+            default: return room.ToString();
         }
-        catch (Exception ex) { ErrorReporter.Report(ex, HandlingId, "DoorsUI.OnGUI: draw doors window"); }
     }
 
     private void DoorsWindow(int windowID)
@@ -64,7 +80,7 @@ public class DoorsUI : MonoBehaviour
         {
             GUILayout.BeginHorizontal();
 
-            GUILayout.Label($"{doorRoom.ToString()}", GUILayout.Width(110f));
+            GUILayout.Label($"{GetRoomName(doorRoom)}", GUILayout.Width(110f));
 
             GUILayout.BeginHorizontal();
 
@@ -72,14 +88,14 @@ public class DoorsUI : MonoBehaviour
 
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button("Close", GUIStylePreset.NormalButton, GUILayout.Width(50f)))
+            if (GUILayout.Button("Fermer", GUIStylePreset.NormalButton, GUILayout.Width(50f)))
             {
                 DoorsHandler.CloseDoorsInRoom(doorRoom);
             }
 
             if (map is MapNames.Polus or MapNames.Airship or MapNames.Fungle)
             {
-                if (GUILayout.Button("Open", GUIStylePreset.NormalButton, GUILayout.Width(50f)))
+                if (GUILayout.Button("Ouvrir", GUIStylePreset.NormalButton, GUILayout.Width(50f)))
                 {
                     DoorsHandler.OpenDoorsInRoom(doorRoom);
                 }
@@ -88,7 +104,7 @@ public class DoorsUI : MonoBehaviour
             if (Utils.isHost)
             {
                 var spamClose = _doorsToSpamClose.Contains(doorRoom);
-                spamClose = GUILayout.Toggle(spamClose, "Spam Close", GUIStylePreset.NormalToggle);
+                spamClose = GUILayout.Toggle(spamClose, "Spam fermeture", GUIStylePreset.NormalToggle);
 
                 if (spamClose && !_doorsToSpamClose.Contains(doorRoom))
                 {
@@ -102,7 +118,7 @@ public class DoorsUI : MonoBehaviour
                 if (map is MapNames.Polus or MapNames.Airship or MapNames.Fungle)
                 {
                     var spamOpen = _doorsToSpamOpen.Contains(doorRoom);
-                    spamOpen = GUILayout.Toggle(spamOpen, "Spam Open", GUIStylePreset.NormalToggle);
+                    spamOpen = GUILayout.Toggle(spamOpen, "Spam ouverture", GUIStylePreset.NormalToggle);
 
                     if (spamOpen && !_doorsToSpamOpen.Contains(doorRoom))
                     {
@@ -116,7 +132,7 @@ public class DoorsUI : MonoBehaviour
             }
             else
             {
-                // Clear spam lists if not host
+                // Vide les listes de spam si on n'est pas hôte
                 if (_doorsToSpamClose.Count != 0 || _doorsToSpamOpen.Count != 0)
                 {
                     _doorsToSpamClose.Clear();
@@ -136,14 +152,14 @@ public class DoorsUI : MonoBehaviour
 
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("Close All", GUIStylePreset.NormalButton))
+        if (GUILayout.Button("Tout fermer", GUIStylePreset.NormalButton))
         {
             CheatToggles.closeAllDoors = true;
         }
 
         if (map is MapNames.Polus or MapNames.Airship or MapNames.Fungle)
         {
-            if (GUILayout.Button("Open All", GUIStylePreset.NormalButton))
+            if (GUILayout.Button("Tout ouvrir", GUIStylePreset.NormalButton))
             {
                 CheatToggles.openAllDoors = true;
             }
@@ -153,11 +169,11 @@ public class DoorsUI : MonoBehaviour
 
         if (Utils.isHost)
         {
-            CheatToggles.spamCloseAllDoors = GUILayout.Toggle(CheatToggles.spamCloseAllDoors, "Spam Close All", GUIStylePreset.NormalToggle);
+            CheatToggles.spamCloseAllDoors = GUILayout.Toggle(CheatToggles.spamCloseAllDoors, "Spam fermer tout", GUIStylePreset.NormalToggle);
 
             if (map is MapNames.Polus or MapNames.Airship or MapNames.Fungle)
             {
-                CheatToggles.spamOpenAllDoors = GUILayout.Toggle(CheatToggles.spamOpenAllDoors, "Spam Open All", GUIStylePreset.NormalToggle);
+                CheatToggles.spamOpenAllDoors = GUILayout.Toggle(CheatToggles.spamOpenAllDoors, "Spam ouvrir tout", GUIStylePreset.NormalToggle);
             }
         }
         else
@@ -174,27 +190,23 @@ public class DoorsUI : MonoBehaviour
 
     public void Update()
     {
-        try
+        if (!Utils.isShip) return;
+
+        // Spam de fermeture des portes sélectionnées
+        foreach (var doorRoom in _doorsToSpamClose)
         {
-            if (!Utils.isShip) return;
+            DoorsHandler.CloseDoorsInRoom(doorRoom);
+        }
 
-            // Spam close selected doors
-            foreach (var doorRoom in _doorsToSpamClose)
+        // Spam d'ouverture des portes sélectionnées
+        var map = (MapNames)Utils.GetCurrentMapID();
+
+        if (map is MapNames.Polus or MapNames.Airship or MapNames.Fungle)
+        {
+            foreach (var doorRoom in _doorsToSpamOpen)
             {
-                DoorsHandler.CloseDoorsInRoom(doorRoom);
-            }
-
-            // Spam open selected doors
-            var map = (MapNames)Utils.GetCurrentMapID();
-
-            if (map is MapNames.Polus or MapNames.Airship or MapNames.Fungle)
-            {
-                foreach (var doorRoom in _doorsToSpamOpen)
-                {
-                    DoorsHandler.OpenDoorsInRoom(doorRoom);
-                }
+                DoorsHandler.OpenDoorsInRoom(doorRoom);
             }
         }
-        catch (Exception ex) { ErrorReporter.Report(ex, HandlingId, "DoorsUI.Update: spam doors"); }
     }
 }
